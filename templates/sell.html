@@ -1,0 +1,73 @@
+{% include 'header.html' %}
+
+<h2 class="text-center text-3xl font-bold mb-8">Sell a Product</h2>
+
+{% if user %}
+    <div class="w-full max-w-2xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+        <form action="{{ url_for('sell') }}" method="POST" class="space-y-6">
+            
+            <!-- Product Name -->
+            <div>
+                <label for="name" class="block text-lg font-semibold">Product Name:</label>
+                <input type="text" id="name" name="name" required class="w-full p-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+            </div>
+            
+            <!-- Category -->
+            <div>
+                <label for="category" class="block text-lg font-semibold">Category:</label>
+                <input type="text" id="category" name="category" required class="w-full p-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+            </div>
+            
+            <!-- Product Description -->
+            <div>
+                <label for="description" class="block text-lg font-semibold">Product Description:</label>
+                <textarea id="description" name="description" required rows="4" class="w-full p-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all"></textarea>
+            </div>
+            
+            <!-- Image URLs -->
+            <div>
+                <label for="image1" class="block text-lg font-semibold">Image 1</label>
+                <input type="url" id="image1" name="image1" required placeholder="Enter image URL" class="w-full p-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+            </div>
+
+            <div>
+                <label for="image2" class="block text-lg font-semibold">Image 2</label>
+                <input type="url" id="image2" name="image2" placeholder="Enter image URL" class="w-full p-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+            </div>
+
+            <div>
+                <label for="image3" class="block text-lg font-semibold">Image 3</label>
+                <input type="url" id="image3" name="image3" placeholder="Enter image URL" class="w-full p-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+            </div>
+
+            <div>
+                <label for="image4" class="block text-lg font-semibold">Image 4</label>
+                <input type="url" id="image4" name="image4" placeholder="Enter image URL" class="w-full p-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+            </div>
+
+            <!-- Price -->
+            <div>
+                <label for="price" class="block text-lg font-semibold">Price (in coins):</label>
+                <input type="number" id="price" name="price" required class="w-full p-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+            </div>
+            
+            <!-- Age Group -->
+            <div>
+                <label for="age_group" class="block text-lg font-semibold">Age Group:</label>
+                <select id="age_group" name="age_group" class="w-full p-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+                    <option value="Kids">Kids</option>
+                    <option value="Teens">Teens</option>
+                    <option value="Adults">Adults</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full py-4 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">Submit for Review</button>
+        </form>
+    </div>
+{% else %}
+    <div class="text-center p-8">
+        <p class="text-xl font-semibold text-red-600">You must be logged in to sell a product.</p>
+        <a href="{{ url_for('login') }}" class="mt-4 inline-block py-3 px-6 bg-orange-500 text-white text-lg font-semibold rounded-lg hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">Login Here</a>
+    </div>
+{% endif %}

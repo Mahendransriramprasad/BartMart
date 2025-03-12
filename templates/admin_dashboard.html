@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 flex">
+
+    <!-- Sidebar -->
+    <div class="w-64 bg-gray-800 text-white p-5 fixed h-full">
+        <h1 class="text-2xl font-semibold mb-6">Admin</h1>
+        <a href="#" class="block py-3 px-4 text-lg hover:bg-gray-700 rounded transition">Dashboard</a>
+        <a href="#all-products" id="all-products-link" class="block py-3 px-4 text-lg hover:bg-gray-700 rounded transition">Products</a>
+        <a href="#pending-approvals" id="pending-approvals-link" class="block py-3 px-4 text-lg hover:bg-gray-700 rounded transition">Pending Approvals</a>
+        <a href="/" class="block py-3 px-4 text-lg hover:bg-gray-700 rounded transition">Back</a>
+    </div>
+
+    <!-- Content Area -->
+    <div class="ml-64 p-6 w-full">
+        <h1 class="text-3xl font-bold text-center mb-8">Admin Dashboard</h1>
+
+        <!-- All Products Table -->
+        <div id="all-products">
+            <h2 class="text-2xl font-semibold border-b-2 border-orange-500 pb-2 mb-6">All Products</h2>
+            <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Image</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Product Name</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Price</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Category</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Age Group</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr class="hover:bg-gray-100">
+                        <td class="px-6 py-4">
+                            <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-16 h-16 object-cover rounded-md">
+                        </td>
+                        <td class="px-6 py-4">{{ product.name }}</td>
+                        <td class="px-6 py-4">{{ product.price }} <img src="{{ url_for('static', filename='images/coin.webp') }}" alt="coin" class="w-4 h-4 inline-block align-middle ml-2"></td>
+                        <td class="px-6 py-4">{{ product.category }}</td>
+                        <td class="px-6 py-4">{{ product.age_group }}</td>
+                        <td class="px-6 py-4">
+                            <a href="{{ url_for('delete_product', product_id=product._id) }}" class="inline-block py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pending Product Approvals -->
+        <div id="pending-approvals" style="display: none;">
+            <h2 class="text-2xl font-semibold border-b-2 border-orange-500 pb-2 mb-6">Pending Product Approvals</h2>
+            <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Image</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Product Name</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Price</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Category</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Age Group</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in sell_requests %}
+                    <tr class="hover:bg-gray-100">
+                        <td class="px-6 py-4">
+                            <img src="{{ request.image1 }}" alt="{{ request.name }}" class="w-16 h-16 object-cover rounded-md">
+                        </td>
+                        <td class="px-6 py-4">{{ request.name }}</td>
+                        <td class="px-6 py-4">{{ request.price }} <img src="{{ url_for('static', filename='images/coin.webp') }}" alt="coin" class="w-4 h-4 inline-block align-middle ml-2"></td>
+                        <td class="px-6 py-4">{{ request.category }}</td>
+                        <td class="px-6 py-4">{{ request.age_group }}</td>
+                        <td class="px-6 py-4">{{ request.status }}</td>
+                        <td class="px-6 py-4">
+                            <a href="{{ url_for('approve_product', request_id=request._id) }}" class="inline-block py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Approve</a>
+                            <a href="{{ url_for('reject_product', request_id=request._id) }}" class="inline-block py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Reject</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Get all the sidebar links
+        const allProductsLink = document.querySelector('a[href="#all-products"]');
+        const pendingApprovalsLink = document.querySelector('a[href="#pending-approvals"]');
+
+        // Get the content sections
+        const allProductsSection = document.getElementById('all-products');
+        const pendingApprovalsSection = document.getElementById('pending-approvals');
+
+        // Function to show the All Products section
+        allProductsLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            allProductsSection.style.display = 'block';
+            pendingApprovalsSection.style.display = 'none';
+        });
+
+        // Function to show the Pending Approvals section
+        pendingApprovalsLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            allProductsSection.style.display = 'none';
+            pendingApprovalsSection.style.display = 'block';
+        });
+    </script>
+</body>
+</html>

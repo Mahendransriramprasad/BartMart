@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Your Offers</h2>
+<ul>
+    {% for offer in offers %}
+    <li>
+        Product: {{ mongo.db.products.find_one({"_id": ObjectId(offer.product_id)})["name"] }}
+        Buyer: {{ offer.buyer_username }}
+        Offered Price: {{ offer.offered_price }}
+        <a href="{{ url_for('accept_offer', offer_id=offer._id) }}">Accept</a>
+        <a href="{{ url_for('reject_offer', offer_id=offer._id) }}">Reject</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

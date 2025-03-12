@@ -1,0 +1,9 @@
+<h3>Confirm Purchase</h3>
+
+{% if purchase_success %}
+    <p>Thank you for your purchase! Your transaction was successful.</p>
+    <a href="{{ url_for('shop') }}">Back to Shopping</a>
+{% else %}
+    <p>Your purchase has not been completed yet.</p>
+    <a href="{{ url_for('cart') }}">Go back to cart</a>
+{% endif %}

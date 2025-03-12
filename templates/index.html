@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish E-commerce Store</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- FontAwesome -->
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #f9fafb, #e5e7eb);
+        }
+        .hover-glow:hover {
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+        }
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .offer-image {
+            width: 100%; /* Ensure the image takes the full width of its container */
+            height: 300px; /* Set a fixed height */
+            object-fit: contain; /* Ensure the entire image is visible */
+            border-radius: 0.5rem; /* Optional: Add border-radius for rounded corners */
+            background-color: #f9fafb; /* Add a background color to fill empty space */
+        }
+        .section-bg-suggested {
+            background-color: #f0f4ff; /* Light blue background for Suggested Products */
+        }
+        .section-bg-recommended {
+            background-color: #fff0f5; /* Light pink background for Recommended Products */
+        }
+        .section-bg-all-products {
+            background-color: #f5f5f5; /* Light gray background for All Products */
+        }
+        .section-bg-contact {
+            background: linear-gradient(135deg, #f9fafb, #e5e7eb); /* Gradient background for Contact Section */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-inter leading-relaxed text-base">
+
+    {% include 'header.html' %}
+
+    <!-- Home Section -->
+    <section id="home" class="py-20 gradient-bg text-center">
+        <div class="container mx-auto px-6">
+            <h1 class="text-5xl font-bold text-gray-800 mb-6 fade-in">Welcome to Our Stylish Store</h1>
+            <p class="text-xl text-gray-600 mb-12 fade-in">Discover the latest trends and exclusive offers.</p>
+            
+            <!-- Carousel Container -->
+            <div class="relative w-full max-w-6xl mx-auto overflow-hidden rounded-xl shadow-lg">
+                <!-- Carousel Slides -->
+                <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
+                    <!-- Slide 1 -->
+                    <div class="flex-none w-full bg-white p-6 cursor-pointer hover-glow hover-scale" data-scroll-to="suggested-products">
+                        <img src="../static/offer1.webp" alt="Offer 1" class="offer-image">
+                        <p class="text-lg font-semibold text-gray-700 mt-4">Big Sale on Electronics</p>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="flex-none w-full bg-white p-6 cursor-pointer hover-glow hover-scale" data-scroll-to="recommended-products">
+                        <img src="../static/offer2.avif" alt="Offer 2" class="offer-image">
+                        <p class="text-lg font-semibold text-gray-700 mt-4">50% Off on Fashion Items</p>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="flex-none w-full bg-white p-6 cursor-pointer hover-glow hover-scale" data-scroll-to="all-products">
+                        <img src="../static/offer3.jpg" alt="Offer 3" class="offer-image">
+                        <p class="text-lg font-semibold text-gray-700 mt-4">Buy 1 Get 1 Free on Accessories</p>
+                    </div>
+                </div>
+                <!-- Navigation Buttons -->
+                <button id="prevBtn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
+                    <i class="fas fa-chevron-left text-gray-700"></i>
+                </button>
+                <button id="nextBtn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
+                    <i class="fas fa-chevron-right text-gray-700"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Suggested Products Section -->
+    <section id="suggested-products" class="max-w-6xl mx-auto px-6 py-20 section-bg-suggested">
+        <h2 class="text-4xl font-bold text-gray-800 text-center mb-16 fade-in">Suggested Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if suggested_products %}
+                {% for product in suggested_products %}
+                    <div class="bg-white rounded-lg p-6 text-center shadow-xl hover-scale fade-in">
+                        <a href="{{ url_for('product_detail', product_id=product._id) }}" class="cursor-pointer">
+                            <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                        </a>
+                        <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
+                        <p class="text-xl font-semibold text-gray-900"><span>{{ product.price }}</span> <img src="../static/coin.png" alt="coin" class="inline-block w-5 align-middle"></p>
+                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" class="mt-4 inline-block px-6 py-2 bg-pink-500 text-white font-bold rounded-full transform transition duration-300 hover:bg-pink-400 hover:scale-105">Add to Cart</a>
+                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" class="mt-4 inline-block px-6 py-2 bg-blue-500 text-white font-bold rounded-full transform transition duration-300 hover:bg-blue-400 hover:scale-105">Negotiate</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-500 fade-in">No suggested products available.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Recommended Products Section -->
+    <section id="recommended-products" class="max-w-6xl mx-auto px-6 py-20 section-bg-recommended">
+        <h2 class="text-4xl font-bold text-gray-800 text-center mb-16 fade-in">Recommended Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if recommended_products %}
+                {% for product in recommended_products %}
+                    <div class="bg-white rounded-lg p-6 text-center shadow-xl hover-scale fade-in">
+                        <a href="{{ url_for('product_detail', product_id=product._id) }}" class="cursor-pointer">
+                            <img src="{{ product.image }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                        </a>                                                
+                        <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
+                        <p class="text-xl font-semibold text-gray-900"><span>{{ product.price }}</span> <img src="./static/coin.png" alt="coin" class="inline-block w-5 align-middle"></p>
+                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" class="mt-4 inline-block px-6 py-2 bg-pink-500 text-white font-bold rounded-full transform transition duration-300 hover:bg-pink-400 hover:scale-105">Add to Cart</a>
+                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" class="mt-4 inline-block px-6 py-2 bg-blue-500 text-white font-bold rounded-full transform transition duration-300 hover:bg-blue-400 hover:scale-105">Negotiate</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-500 fade-in">No recommendations yet. Start browsing!</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- All Products Section -->
+    <section id="all-products" class="max-w-6xl mx-auto px-6 py-20 section-bg-all-products">
+        <h2 class="text-4xl font-bold text-gray-800 text-center mb-16 fade-in">All Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for product in all_products %}
+                <div class="bg-white rounded-lg p-6 text-center shadow-xl hover-scale fade-in">
+                    <a href="{{ url_for('product_detail', product_id=product._id) }}" class="cursor-pointer">
+                        <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                    </a>
+                    <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
+                    <p class="text-xl font-semibold text-gray-900"><span>{{ product.price }}</span> <img src="./static/coin.png" alt="coin" class="inline-block w-5 align-middle"></p>
+                    {% if user %}
+                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" class="mt-4 inline-block px-6 py-2 bg-pink-500 text-white font-bold rounded-full transform transition duration-300 hover:bg-pink-400 hover:scale-105">Add to Cart</a>
+                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" class="mt-4 inline-block px-6 py-2 bg-blue-500 text-white font-bold rounded-full transform transition duration-300 hover:bg-blue-400 hover:scale-105">Negotiate</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 section-bg-contact text-center">
+        <h2 class="text-4xl font-bold text-gray-800 mb-8 fade-in">Contact Us</h2>
+        <p class="text-lg text-gray-600 mb-12 fade-in">For any inquiries, feel free to reach out to us!</p>
+        <form action="#" method="POST" class="mt-6 max-w-lg mx-auto fade-in">
+            <input type="text" name="name" placeholder="Your Name" class="w-full p-4 mb-4 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500">
+            <input type="email" name="email" placeholder="Your Email" class="w-full p-4 mb-4 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500">
+            <textarea name="message" placeholder="Your Message" class="w-full p-4 mb-4 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500" rows="5"></textarea>
+            <button type="submit" class="w-full px-6 py-2 bg-pink-500 text-white rounded-full font-bold transform transition duration-300 hover:bg-pink-400 hover:scale-105">Send Message</button>
+        </form>
+    </section>
+
+    <footer class="text-center py-8 bg-gray-800 text-white">
+        <p>&copy; 2025 Your Stylish E-commerce Store. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript to handle scrolling when offer images are clicked
+        const offerCards = document.querySelectorAll('.cursor-pointer');
+
+        offerCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const sectionId = card.getAttribute('data-scroll-to');
+                const section = document.getElementById(sectionId);
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // JavaScript for Carousel
+        const carousel = document.getElementById('carousel');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+
+        // Function to move to the next slide
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % 3; // 3 is the number of slides
+            updateCarousel();
+        }
+
+        // Function to move to the previous slide
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + 3) % 3; // 3 is the number of slides
+            updateCarousel();
+        }
+
+        // Function to update the carousel position
+        function updateCarousel() {
+            const offset = -currentIndex * 100;
+            carousel.style.transform = `translateX(${offset}%)`;
+        }
+
+        // Event listeners for buttons
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Optional: Auto-play the carousel
+        setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    </script>
+
+</body>
+</html>

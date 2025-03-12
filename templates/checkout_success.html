@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Successful</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom styles (if any) -->
+    <style>
+        /* You can add additional custom styles here if necessary */
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Main content area -->
+    <div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center mt-10">
+        <h3 class="text-3xl font-semibold text-green-600 mb-6">Checkout Successful!</h3>
+        <p class="text-xl text-gray-800 mb-6">Thank you for your purchase, <span class="font-bold">{{ user.username }}</span>! Your order has been successfully processed.</p>
+
+        <!-- Optionally, display the remaining coins -->
+        <p class="text-lg text-gray-600 mb-6">Your remaining coins: <strong class="text-green-600">{{ user.coins }}</strong></p>
+
+        <a href="{{ url_for('home') }}" class="inline-block px-8 py-3 bg-green-600 text-white text-lg font-bold rounded-lg hover:bg-green-700 transition duration-300">Back to Shopping</a>
+    </div>
+
+</body>
+</html>

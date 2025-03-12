@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart 🛒</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- FontAwesome -->
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .cart-item {
+            transition: all 0.3s ease;
+        }
+        .cart-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .quantity-btn {
+            transition: background-color 0.3s ease;
+        }
+        .quantity-btn:hover {
+            filter: brightness(90%);
+        }
+        .checkout-btn {
+            transition: background-color 0.3s ease;
+        }
+        .checkout-btn:hover {
+            filter: brightness(90%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans leading-relaxed">
+
+    {% include 'header.html' %}
+
+    <h2 class="text-center text-4xl font-bold mb-8 mt-12 fade-in">Your Cart 🛒</h2>
+
+    {% if cart_items %}
+        <div class="cart-container w-full max-w-6xl mx-auto p-8 bg-white rounded-lg shadow-lg fade-in">
+            <ul class="cart-items space-y-6">
+                {% for item in cart_items %}
+                    <li class="cart-item flex items-center justify-between p-6 bg-white rounded-lg shadow-md hover-scale">
+                        <img src="{{ item.image1 }}" alt="{{ item.name }}" class="w-32 h-32 object-cover rounded-lg">
+                        <div class="cart-item-details flex-grow ml-6">
+                            <p class="cart-item-name text-xl font-semibold flex items-center">
+                                {{ item.name }} - 
+                                <strong class="flex items-center ml-2">
+                                    {{ item.price }}
+                                    <img src="{{ url_for('static', filename='coin.png') }}" alt="coin" class="w-5 h-5 mx-2">
+                                    Coins
+                                </strong>
+                            </p>                                                
+
+                            <!-- Quantity Controls -->
+                            <div class="cart-item-quantity flex items-center gap-4 mt-3">
+                                <p class="text-lg">Quantity:</p>
+                                <a href="{{ url_for('update_cart_quantity', product_id=item._id, action='decrease') }}" class="quantity-btn bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors">➖</a>
+                                <span class="text-lg">{{ item.quantity }}</span>
+                                <a href="{{ url_for('update_cart_quantity', product_id=item._id, action='increase') }}" class="quantity-btn bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors">➕</a>
+                            </div>
+                            
+                            <p class="cart-item-subtotal text-xl mt-3">
+                                <strong>
+                                    Subtotal: {{ item.price * item.quantity }} 
+                                    <img src="{{ url_for('static', filename='coin.png') }}" alt="coin" class="w-5 h-5 inline-block ml-2">
+                                    Coins
+                                </strong>
+                            </p> 
+                            <a href="{{ url_for('remove_from_cart', product_id=item._id) }}" class="remove-item text-red-600 font-semibold mt-2 hover:text-red-500 transition-colors">Remove</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="cart-footer flex justify-between items-center mt-8 pt-6 border-t-2 border-gray-300">
+                <h3 class="text-2xl flex items-center">
+                    Total Cost: {{ total_cost }} 
+                    <img src="{{ url_for('static', filename='coin.png') }}" alt="coin" class="w-6 h-6 ml-3">
+                    Coins
+                </h3>            
+
+                {% if user.coins >= total_cost %}
+                    <form method="POST" action="{{ url_for('checkout') }}">
+                        <button type="submit" class="checkout-btn bg-blue-600 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">Checkout ✅</button>
+                    </form>
+                {% else %}
+                    <p class="insufficient-coins text-lg text-red-600">⚠️ Not enough coins! Earn more to complete the purchase.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+    {% else %}
+        <p class="text-center text-lg text-gray-700 mt-8 fade-in">Your cart is empty.</p>
+    {% endif %}
+
+    <a href="{{ url_for('home') }}" class="continue-shopping block text-center mt-8 py-3 px-6 bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-600 transition-colors max-w-xs mx-auto fade-in">Continue Shopping</a>
+
+</body>
+</html>

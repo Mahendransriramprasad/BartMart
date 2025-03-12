@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Product Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .hover-scale {
+            transition: transform 0.2s ease-in-out;
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    {% include 'header.html' %}
+    
+    <section class="py-12 fade-in">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Image Gallery -->
+                <div class="space-y-6">
+                    <!-- Main Image -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
+                        <img id="main-image" src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-96 object-contain rounded-lg transition-transform duration-300">
+                    </div>
+
+                    <!-- Thumbnails -->
+                    <div class="flex space-x-4 overflow-x-auto py-2">
+                        {% for image in [product.image1, product.image2, product.image3, product.image4] %}
+                            {% if image %}
+                                <img src="{{ image }}" alt="Thumbnail" class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-pink-500 transition-transform transform hover:scale-105" onclick="changeImage('{{ image }}')">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="space-y-6">
+                    <h1 class="text-4xl font-bold text-gray-900">{{ product.name }}</h1>
+                    <p class="text-lg text-gray-600">{{ product.description }}</p>
+
+                    <!-- Price Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-md hover-scale">
+                        <p class="text-2xl font-semibold text-gray-900">
+                            Price: <span>{{ product.price }}</span>
+                            <img src="../static/coin.png" alt="coin" class="inline-block w-6 align-middle">
+                        </p>
+                        <p class="text-lg text-gray-600 mt-2">Seller: <span class="font-medium text-pink-600">{{ seller_name }}</span></p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-4">
+                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" class="flex-1 text-center px-6 py-3 bg-pink-500 text-white font-semibold rounded-lg hover:bg-pink-600 transition-transform transform hover:scale-105 shadow-md">
+                            Add to Cart
+                        </a>
+                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" class="flex-1 text-center px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-transform transform hover:scale-105 shadow-md">
+                            Negotiate
+                        </a>
+                    </div>
+
+                    <!-- Additional Details -->
+                    <div class="mt-6 space-y-4">
+                        <div class="bg-white p-6 rounded-lg shadow-md hover-scale">
+                            <h2 class="text-xl font-semibold text-gray-900">Product Details</h2>
+                            <ul class="mt-2 space-y-2 text-gray-600">
+                                <li><span class="font-medium">Category:</span> {{ product.category }}</li>
+                                <li><span class="font-medium">Age Group:</span> {{ product.age_group }}</li>
+                                <li><span class="font-medium">Condition:</span> New</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-lg shadow-md hover-scale">
+                            <h2 class="text-xl font-semibold text-gray-900">Seller Information</h2>
+                            <ul class="mt-2 space-y-2 text-gray-600">
+                                <li><span class="font-medium">Username:</span> {{ seller_name }}</li>
+                                <li><span class="font-medium">Rating:</span> ⭐⭐⭐⭐☆ (4.5/5)</li>
+                                <li><span class="font-medium">Items Sold:</span> 120+</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-lg">&copy; 2025 Your Stylish E-commerce Store. All rights reserved.</p>
+            <p class="text-sm text-gray-400 mt-2">Designed with ❤️ for a better shopping experience.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript function to change the main image when a thumbnail is clicked
+        function changeImage(imageSrc) {
+            document.getElementById("main-image").src = imageSrc;
+        }
+    </script>
+
+</body>
+</html>

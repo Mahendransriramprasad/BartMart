@@ -1,0 +1,20 @@
+<!-- my_negotiations.html -->
+<h3>Negotiations for your Products</h3>
+{% if negotiations %}
+    <ul>
+    {% for negotiation in negotiations %}
+        <li>
+            Product: {{ negotiation.product_name }} <br>
+            Buyer: {{ negotiation.buyer }} <br>
+            Proposed Price: {{ negotiation.proposed_price }} <br>
+            Status: {{ negotiation.status }} <br>
+            {% if negotiation.status == "Pending" %}
+                <a href="{{ url_for('approve_negotiation', negotiation_id=negotiation._id) }}">Approve</a> |
+                <a href="{{ url_for('reject_negotiation', negotiation_id=negotiation._id) }}">Reject</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No pending negotiations.</p>
+{% endif %}

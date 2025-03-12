@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Navbar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center p-4 bg-gray-800 text-white shadow-md">
+        <div class="flex items-center space-x-6">
+            <!-- Logo and Branding -->
+            <img src="../static/icon.jpg" alt="Logo" class="h-12 w-12">
+            <a href="/" class="text-2xl font-semibold hover:text-orange-500 transition-colors">BART MART</a>
+
+            <!-- Admin Link (visible to admin only) -->
+            {% if session.admin %}
+                <a href="{{ url_for('admin_dashboard') }}" class="text-lg hover:text-orange-500 transition-colors">Admin Panel</a>
+            {% elif session.username %}
+                <!-- User Coins and Links -->
+                <span class="text-sm">Your Coins: {{ user.coins }} 
+                    <svg class="w-5 h-5 inline-block ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" class="fill-yellow-400" />
+                        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.5 4.5l1.5 1.5M19.5 4.5l-1.5 1.5M4.5 19.5l1.5-1.5M19.5 19.5l-1.5-1.5" class="stroke-gray-800" />
+                    </svg>
+                </span>
+                <a href="{{ url_for('cart') }}" class="text-lg hover:text-orange-500 transition-colors">Cart 🛒</a>
+                <a href="{{ url_for('sell') }}" class="text-lg hover:text-orange-500 transition-colors">Sell 📦</a>
+                <a href="{{ url_for('my_products') }}" class="text-lg hover:text-orange-500 transition-colors">Sold 📦</a>
+            {% endif %}
+        </div>
+
+        <!-- User Section (Login/Register/Logout) -->
+        <div class="flex items-center space-x-4">
+            {% if session.admin or session.username %}
+                <a href="{{ url_for('logout') }}" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-400 transition-colors">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-400 transition-colors">Login</a>
+                <a href="{{ url_for('register') }}" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-400 transition-colors">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% include 'header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negotiate Price</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-inter">
+
+    <div class="container mx-auto px-6 py-12">
+        <!-- Negotiation Form -->
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg mx-auto">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Negotiate Price for {{ product.name }}</h3>
+            
+            <form method="POST">
+                <div class="mb-6">
+                    <label for="proposed_price" class="block text-lg font-medium text-gray-700">Propose Your Price:</label>
+                    <input type="number" id="proposed_price" name="proposed_price" class="w-full p-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required>
+                </div>
+                
+                <button type="submit" class="w-full py-3 bg-pink-500 text-white font-bold rounded-lg hover:bg-pink-400 transition-all duration-300">Submit Negotiation</button>
+            </form>
+        </div>
+
+        {% if proposed_price %}
+            <!-- Product and Offer Display -->
+            <div class="mt-12 bg-white p-8 rounded-lg shadow-lg max-w-lg mx-auto">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Your Negotiation Offer for {{ product.name }}</h3>
+                <div class="flex items-center mb-4">
+                    <img src="{{ product.image }}" alt="{{ product.name }}" class="w-32 h-32 object-cover rounded-lg mr-6">
+                    <div>
+                        <p class="text-lg font-medium text-gray-700">{{ product.name }}</p>
+                        <p class="text-lg font-semibold text-gray-900">
+                            <span>Proposed Price: ${{ proposed_price }}</span>
+                        </p>
+                    </div>
+                </div>
+                <p class="text-gray-600">Thank you for your negotiation! Your proposed price of ${{ proposed_price }} will be reviewed, and we'll get back to you soon.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+    <!-- Header Section -->
+    <header class="bg-gray-800 text-white p-4 fixed top-0 left-0 w-full shadow-lg z-50">
+        <div class="flex items-center">
+            <img src="../static/icon.jpg" alt="Brand Logo" class="h-10 mr-3"> <!-- Replace with your logo -->
+            <a href="/">BART MART</a>
+        </div>
+    </header>
+
+    <!-- Login Form Section -->
+    <div class="login-container max-w-sm w-full bg-white rounded-lg shadow-lg p-8 mt-20 mx-auto">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-6">Login</h2>
+        <form method="POST" class="flex flex-col gap-4">
+            <input type="text" name="username" placeholder="Username" required class="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none">
+            <input type="password" name="password" placeholder="Password" required class="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none">
+            <button type="submit" class="bg-orange-500 text-white p-3 rounded-lg hover:bg-orange-400 transition duration-300">Login</button>
+        </form>
+        <p class="text-sm text-gray-600 mt-4">Don't have an account? <a href="{{ url_for('register') }}" class="text-orange-500 font-semibold">Register</a></p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen py-6 px-4">
+
+    <!-- Header -->
+    <header class="bg-gray-800 text-white w-full p-4 shadow-md fixed top-0 left-0 z-10">
+        <div class="flex items-center">
+            <img src="../static/icon.jpg" alt="Logo" class="h-10 mr-3"> <!-- Replace with your logo -->
+            <h1 class="text-2xl font-semibold">BART MART</h1>
+        </div>
+    </header>
+
+    <!-- Registration Container -->
+    <div class="bg-white p-8 rounded-lg w-full max-w-md mt-20 shadow-lg transition-shadow duration-300 hover:shadow-xl">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Create an Account</h2>
+        
+        <form method="POST" class="space-y-6">
+            <!-- Username Input -->
+            <div class="relative">
+                <input type="text" name="username" placeholder="Username" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500">
+                <i class="fas fa-user absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+            </div>
+
+            <!-- Password Input -->
+            <div class="relative">
+                <input type="password" name="password" placeholder="Password" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500">
+                <i class="fas fa-lock absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+            </div>
+
+            <!-- Date of Birth Input -->
+            <div class="relative">
+                <input type="date" name="dob" placeholder="Date of Birth" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500">
+                <i class="fas fa-calendar-alt absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full p-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-400 transition-colors">Register</button>
+        </form>
+
+        <!-- Login Link -->
+        <p class="text-sm text-gray-500 mt-4">Already have an account? <a href="{{ url_for('login') }}" class="text-blue-500 font-semibold hover:text-blue-600 transition-colors">Login</a></p>
+    </div>
+    
+</body>
+</html>
