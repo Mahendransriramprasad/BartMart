@@ -59,26 +59,14 @@
                                 {{ item.name }} - 
                                 <strong class="flex items-center ml-2">
                                     {{ item.price }}
-                                    <img src="{{ url_for('static', filename='coin.png') }}" alt="coin" class="w-5 h-5 mx-2">
+                                    <svg class="w-6 h-6 ml-2 coin-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.5 4.5l1.5 1.5M19.5 4.5l-1.5 1.5M4.5 19.5l1.5-1.5M19.5 19.5l-1.5-1.5" />
+                                    </svg>
                                     Coins
                                 </strong>
                             </p>                                                
 
-                            <!-- Quantity Controls -->
-                            <div class="cart-item-quantity flex items-center gap-4 mt-3">
-                                <p class="text-lg">Quantity:</p>
-                                <a href="{{ url_for('update_cart_quantity', product_id=item._id, action='decrease') }}" class="quantity-btn bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors">➖</a>
-                                <span class="text-lg">{{ item.quantity }}</span>
-                                <a href="{{ url_for('update_cart_quantity', product_id=item._id, action='increase') }}" class="quantity-btn bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors">➕</a>
-                            </div>
-                            
-                            <p class="cart-item-subtotal text-xl mt-3">
-                                <strong>
-                                    Subtotal: {{ item.price * item.quantity }} 
-                                    <img src="{{ url_for('static', filename='coin.png') }}" alt="coin" class="w-5 h-5 inline-block ml-2">
-                                    Coins
-                                </strong>
-                            </p> 
                             <a href="{{ url_for('remove_from_cart', product_id=item._id) }}" class="remove-item text-red-600 font-semibold mt-2 hover:text-red-500 transition-colors">Remove</a>
                         </div>
                     </li>
@@ -88,7 +76,10 @@
             <div class="cart-footer flex justify-between items-center mt-8 pt-6 border-t-2 border-gray-300">
                 <h3 class="text-2xl flex items-center">
                     Total Cost: {{ total_cost }} 
-                    <img src="{{ url_for('static', filename='coin.png') }}" alt="coin" class="w-6 h-6 ml-3">
+                    <svg class="w-6 h-6 ml-2 coin-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.5 4.5l1.5 1.5M19.5 4.5l-1.5 1.5M4.5 19.5l1.5-1.5M19.5 19.5l-1.5-1.5" />
+                    </svg>
                     Coins
                 </h3>            
 

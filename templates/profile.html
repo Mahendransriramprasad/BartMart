@@ -1,0 +1,55 @@
+{% extends "header.html" %}
+
+{% block content %}
+<div class="container mx-auto p-6 flex justify-center">
+    <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
+        <h1 class="text-4xl font-bold text-gray-800 text-center mb-6">Profile</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+            <!-- Avatar & Name Section -->
+            <div class="flex flex-col items-center mb-6">
+                {% if user.avatar %}
+                    <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}" 
+                         alt="Avatar" 
+                         class="w-28 h-28 rounded-full border-4 border-orange-500 shadow-lg">
+                {% else %}
+                    <img src="{{ url_for('static', filename='default_avatar.png') }}" 
+                         alt="Default Avatar" 
+                         class="w-28 h-28 rounded-full border-4 border-gray-300 shadow-lg">
+                {% endif %}
+                
+                <!-- Display User Name -->
+                <p class="mt-3 text-xl font-semibold text-gray-800">{{ user.name }}</p>
+
+                <!-- Upload Avatar -->
+                <label for="avatar" class="mt-4 text-orange-500 font-semibold cursor-pointer hover:underline">
+                    Change Avatar
+                </label>
+                <input type="file" name="avatar" id="avatar" class="hidden">
+            </div>
+
+            <!-- Bio Section -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-semibold mb-2" for="bio">
+                    Bio
+                </label>
+                <textarea name="bio" id="bio" rows="4" 
+                          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">{{ user.bio if user.bio else '' }}</textarea>
+            </div>
+
+            <!-- Products Sold -->
+            <div class="mb-6 text-center">
+                <span class="text-gray-600 font-medium">Products Sold:</span>
+                <span class="text-gray-800 text-lg font-semibold">{{ user.sold_products|length if user.sold_products else 0 }}</span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-center">
+                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300">
+                    Update Profile
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

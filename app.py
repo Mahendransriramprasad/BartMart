@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
-
+import os
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/ecommerce"
 app.secret_key = "suba@123"
@@ -55,7 +55,65 @@ def home():
         user=user
     )
 
-# User Registration
+
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    if "username" not in session:
+        return redirect(url_for("login"))
+
+    user = mongo.db.users.find_one({"username": session["username"]})
+
+    if request.method == "POST":
+        # Handle profile update
+        bio = request.form.get("bio")
+        avatar = request.files.get("avatar")
+
+        update_data = {"bio": bio}
+        if avatar:
+            # Validate file type
+            allowed_extensions = {"png", "jpg", "jpeg", "gif"}
+            if "." in avatar.filename and avatar.filename.split(".")[-1].lower() in allowed_extensions:
+                # Ensure the avatars directory exists
+                avatars_dir = os.path.join("static", "avatars")
+                if not os.path.exists(avatars_dir):
+                    os.makedirs(avatars_dir)
+
+                # Save the avatar image
+                avatar_filename = f"{user['username']}_{avatar.filename}"
+                avatar_path = os.path.join(avatars_dir, avatar_filename)
+                print(f"Saving avatar to: {avatar_path}")  # Debugging: Print the file path
+                avatar.save(avatar_path)
+                update_data["avatar"] = avatar_filename
+            else:
+                flash("Invalid file type. Only PNG, JPG, JPEG, and GIF are allowed.", "error")
+
+        # Update the user's profile in the database
+        mongo.db.users.update_one({"username": session["username"]}, {"$set": update_data})
+        flash("Profile updated successfully!", "success")
+        return redirect(url_for("profile"))
+
+    return render_template("profile.html", user=user)
+
+@app.route("/profile/<username>")
+def profile_view(username):
+    # Fetch the seller's details from the database
+    seller = mongo.db.users.find_one({"username": username})
+    if not seller:
+        flash("Seller not found.", "error")
+        return redirect(url_for("home"))
+
+    # Fetch the seller's sold products
+    sold_products = []
+    if seller.get("sold_products"):
+        sold_products = list(mongo.db.products.find({"_id": {"$in": [ObjectId(product_id) for product_id in seller["sold_products"]]}}))
+
+    # Fetch the current logged-in user (if any)
+    user = None
+    if "username" in session:
+        user = mongo.db.users.find_one({"username": session["username"]})
+
+    return render_template("profileview.html", seller=seller, sold_products=sold_products, user=user)
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -68,12 +126,20 @@ def register():
             flash("Username already exists.", "error")
             return redirect(url_for("register"))
 
-        mongo.db.users.insert_one({"username": username, "password": password, "dob": dob, "coins": 100, "cart": {}, "sold_products": []})
+        mongo.db.users.insert_one({
+            "username": username,
+            "password": password,
+            "dob": dob,
+            "coins": 100,
+            "cart": {},
+            "sold_products": [],
+            "avatar": None,  # Initialize avatar as None
+            "bio": ""  # Initialize bio as an empty string
+        })
         flash("Registration successful!", "success")
         return redirect(url_for("login"))
 
     return render_template("register.html")
-
 # User & Admin Login
 @app.route("/login", methods=["GET", "POST"])
 def login():

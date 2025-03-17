@@ -3,45 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-commerce Navbar</title>
+    <title>BART-MART</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background: linear-gradient(135deg, #1e293b, #0f172a); /* Gradient background */
+        }
+        .navbar a:hover {
+            color: #f97316; /* Orange hover color */
+        }
+        .coin-icon {
+            fill: #fbbf24; /* Yellow for coin icon */
+        }
+        .user-name {
+            font-weight: 500;
+            color: #f97316; /* Orange for username */
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
-
     <!-- Navbar -->
-    <nav class="flex justify-between items-center p-4 bg-gray-800 text-white shadow-md">
+    <nav class="navbar flex justify-between items-center p-4 text-white shadow-lg">
+        <!-- Left Section: Logo and Branding -->
         <div class="flex items-center space-x-6">
-            <!-- Logo and Branding -->
-            <img src="../static/icon.jpg" alt="Logo" class="h-12 w-12">
-            <a href="/" class="text-2xl font-semibold hover:text-orange-500 transition-colors">BART MART</a>
+            <!-- Logo -->
+            <img src="../static/icon.jpg" alt="Logo" class="h-12 w-12 rounded-full">
 
-            <!-- Admin Link (visible to admin only) -->
+            <!-- Brand Name -->
+            <a href="/" class="text-2xl font-bold hover:text-orange-500 transition-colors">BART MART</a>
+        </div>
+
+        <!-- Middle Section: User-Specific Links -->
+        <div class="flex items-center space-x-8">
             {% if session.admin %}
+                <!-- Admin Panel Link -->
                 <a href="{{ url_for('admin_dashboard') }}" class="text-lg hover:text-orange-500 transition-colors">Admin Panel</a>
             {% elif session.username %}
-                <!-- User Coins and Links -->
-                <span class="text-sm">Your Coins: {{ user.coins }} 
-                    <svg class="w-5 h-5 inline-block ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10" class="fill-yellow-400" />
-                        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.5 4.5l1.5 1.5M19.5 4.5l-1.5 1.5M4.5 19.5l1.5-1.5M19.5 19.5l-1.5-1.5" class="stroke-gray-800" />
+                <!-- User Coins -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-lg">Your Coins: {{ user.coins }}</span>
+                    <svg class="w-6 h-6 coin-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.5 4.5l1.5 1.5M19.5 4.5l-1.5 1.5M4.5 19.5l1.5-1.5M19.5 19.5l-1.5-1.5" />
                     </svg>
-                </span>
-                <a href="{{ url_for('cart') }}" class="text-lg hover:text-orange-500 transition-colors">Cart 🛒</a>
-                <a href="{{ url_for('sell') }}" class="text-lg hover:text-orange-500 transition-colors">Sell 📦</a>
-                <a href="{{ url_for('my_products') }}" class="text-lg hover:text-orange-500 transition-colors">Sold 📦</a>
+                </div>
+
+                <!-- Cart Link -->
+                <a href="{{ url_for('cart') }}" class="text-lg hover:text-orange-500 transition-colors">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+
+                <!-- Sell Link -->
+                <a href="{{ url_for('sell') }}" class="text-lg hover:text-orange-500 transition-colors">
+                    <i class="fas fa-box-open"></i> Sell
+                </a>
+
+                <!-- My Products Link -->
+                <a href="{{ url_for('my_products') }}" class="text-lg hover:text-orange-500 transition-colors">
+                    <i class="fas fa-boxes"></i> Sold
+                </a>
             {% endif %}
         </div>
 
-        <!-- User Section (Login/Register/Logout) -->
-        <div class="flex items-center space-x-4">
+        <!-- Right Section: User Info and Actions -->
+        <div class="flex items-center space-x-6">
             {% if session.admin or session.username %}
-                <a href="{{ url_for('logout') }}" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-400 transition-colors">Logout</a>
+                <!-- Display Username/Seller Name -->
+                <div class="flex items-center space-x-2">
+                    <a href="{{ url_for('profile') }}" class="text-lg user-name">{{ session.username }}</a>
+                </div>
+
+                <!-- Logout Button -->
+                <a href="{{ url_for('logout') }}" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors">
+                    Logout
+                </a>
             {% else %}
-                <a href="{{ url_for('login') }}" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-400 transition-colors">Login</a>
-                <a href="{{ url_for('register') }}" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-400 transition-colors">Register</a>
+                <!-- Login and Register Buttons -->
+                <a href="{{ url_for('login') }}" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors">
+                    Login
+                </a>
+                <a href="{{ url_for('register') }}" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors">
+                    Register
+                </a>
             {% endif %}
         </div>
     </nav>
 
+    <!-- Content Block -->
+    {% block content %}{% endblock %}
 </body>
 </html>

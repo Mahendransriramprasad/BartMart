@@ -10,32 +10,57 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
+        
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
         .hover-scale {
             transition: transform 0.2s ease-in-out;
         }
+
         .hover-scale:hover {
             transform: scale(1.05);
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modern Button Styling */
+        .modern-btn {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .modern-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
     {% include 'header.html' %}
-    
+
     <section class="py-12 fade-in">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                
                 <!-- Image Gallery -->
                 <div class="space-y-6">
                     <!-- Main Image -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
+                    <div class="glass-card">
                         <img id="main-image" src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-96 object-contain rounded-lg transition-transform duration-300">
                     </div>
 
@@ -43,7 +68,9 @@
                     <div class="flex space-x-4 overflow-x-auto py-2">
                         {% for image in [product.image1, product.image2, product.image3, product.image4] %}
                             {% if image %}
-                                <img src="{{ image }}" alt="Thumbnail" class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-pink-500 transition-transform transform hover:scale-105" onclick="changeImage('{{ image }}')">
+                                <img src="{{ image }}" alt="Thumbnail" 
+                                     class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-pink-500 transition-transform transform hover:scale-110 shadow-md" 
+                                     onclick="changeImage('{{ image }}')">
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -51,32 +78,39 @@
 
                 <!-- Product Details -->
                 <div class="space-y-6">
-                    <h1 class="text-4xl font-bold text-gray-900">{{ product.name }}</h1>
+                    <h1 class="text-4xl font-extrabold text-gray-900">{{ product.name }}</h1>
                     <p class="text-lg text-gray-600">{{ product.description }}</p>
 
                     <!-- Price Section -->
-                    <div class="bg-white p-6 rounded-lg shadow-md hover-scale">
-                        <p class="text-2xl font-semibold text-gray-900">
-                            Price: <span>{{ product.price }}</span>
-                            <img src="../static/coin.png" alt="coin" class="inline-block w-6 align-middle">
+                    <div class="glass-card">
+                        <p class="text-2xl font-semibold text-gray-900 flex items-center">
+                            Price: 
+                            <span class="ml-1">{{ product.price }}</span>
+                            <svg class="w-6 h-6 ml-2 coin-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.5 4.5l1.5 1.5M19.5 4.5l-1.5 1.5M4.5 19.5l1.5-1.5M19.5 19.5l-1.5-1.5" />
+                            </svg>
                         </p>
-                        <p class="text-lg text-gray-600 mt-2">Seller: <span class="font-medium text-pink-600">{{ seller_name }}</span></p>
+                        
+                        
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex space-x-4">
-                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" class="flex-1 text-center px-6 py-3 bg-pink-500 text-white font-semibold rounded-lg hover:bg-pink-600 transition-transform transform hover:scale-105 shadow-md">
-                            Add to Cart
+                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
+                           class="flex-1 text-center px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold rounded-lg modern-btn shadow-md">
+                            🛒 Add to Cart
                         </a>
-                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" class="flex-1 text-center px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-transform transform hover:scale-105 shadow-md">
-                            Negotiate
+                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
+                           class="flex-1 text-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-lg modern-btn shadow-md">
+                            💬 Negotiate
                         </a>
                     </div>
 
                     <!-- Additional Details -->
                     <div class="mt-6 space-y-4">
-                        <div class="bg-white p-6 rounded-lg shadow-md hover-scale">
-                            <h2 class="text-xl font-semibold text-gray-900">Product Details</h2>
+                        <div class="glass-card">
+                            <h2 class="text-xl font-semibold text-gray-900">📦 Product Details</h2>
                             <ul class="mt-2 space-y-2 text-gray-600">
                                 <li><span class="font-medium">Category:</span> {{ product.category }}</li>
                                 <li><span class="font-medium">Age Group:</span> {{ product.age_group }}</li>
@@ -84,14 +118,19 @@
                             </ul>
                         </div>
 
-                        <div class="bg-white p-6 rounded-lg shadow-md hover-scale">
-                            <h2 class="text-xl font-semibold text-gray-900">Seller Information</h2>
-                            <ul class="mt-2 space-y-2 text-gray-600">
-                                <li><span class="font-medium">Username:</span> {{ seller_name }}</li>
-                                <li><span class="font-medium">Rating:</span> ⭐⭐⭐⭐☆ (4.5/5)</li>
-                                <li><span class="font-medium">Items Sold:</span> 120+</li>
-                            </ul>
-                        </div>
+                        <!-- Seller Information -->
+<div class="glass-card">
+    <h2 class="text-xl font-semibold text-gray-900">🛍️ Seller Information</h2>
+    <ul class="mt-2 space-y-2 text-gray-600">
+        <li>
+            <span class="font-medium">Username:</span>
+            <a href="{{ url_for('profile_view', username=seller_name) }}" class="text-pink-600 hover:underline">
+                {{ seller_name }}
+                
+            </a>
+        </li>
+    </ul>
+</div>
                     </div>
                 </div>
             </div>
@@ -99,15 +138,15 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
+    <footer class="bg-gray-900 text-white py-8">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-lg">&copy; 2025 Your Stylish E-commerce Store. All rights reserved.</p>
+            <p class="text-lg">&copy; 2025 BART-MART. All rights reserved.</p>
             <p class="text-sm text-gray-400 mt-2">Designed with ❤️ for a better shopping experience.</p>
         </div>
     </footer>
 
     <script>
-        // JavaScript function to change the main image when a thumbnail is clicked
+        // Change the main image when a thumbnail is clicked
         function changeImage(imageSrc) {
             document.getElementById("main-image").src = imageSrc;
         }
