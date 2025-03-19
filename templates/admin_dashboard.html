@@ -75,20 +75,24 @@
                     <tr class="hover:bg-gray-100">
                         <td class="px-6 py-4">
                             <div class="grid grid-cols-2 gap-2">
-                                {% if request.image1 %}
-                                    <img src="{{ request.image1 }}" alt="{{ request.name }}" class="w-20 h-20 object-cover rounded-md border border-gray-300">
-                                {% endif %}
-                                {% if request.image2 %}
-                                    <img src="{{ request.image2 }}" alt="{{ request.name }}" class="w-20 h-20 object-cover rounded-md border border-gray-300">
-                                {% endif %}
-                                {% if request.image3 %}
-                                    <img src="{{ request.image3 }}" alt="{{ request.name }}" class="w-20 h-20 object-cover rounded-md border border-gray-300">
-                                {% endif %}
-                                {% if request.image4 %}
-                                    <img src="{{ request.image4 }}" alt="{{ request.name }}" class="w-20 h-20 object-cover rounded-md border border-gray-300">
-                                {% endif %}
+                                {% for image in [request.image1, request.image2, request.image3, request.image4] %}
+                                    {% if image %}
+                                        {% if image.startswith('http') %}
+                                            <img src="{{ image }}" 
+                                                 alt="{{ request.name }}" 
+                                                 class="w-20 h-20 object-cover rounded-md border border-gray-300">
+                                        {% else %}
+                                            {% set static_image = url_for('static', filename=image.split('static/')[-1]) %}
+                                            <img src="{{ static_image }}" 
+                                                 alt="{{ request.name }}" 
+                                                 class="w-20 h-20 object-cover rounded-md border border-gray-300">
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                         </td>
+                    </tr>
+                    
                         
                         <td class="px-6 py-4">{{ request.name }}</td>
                         <td class="px-6 py-4">{{ request.price }} <img src="{{ url_for('static', filename='images/coin.webp') }}" alt="coin" class="w-4 h-4 inline-block align-middle ml-2"></td>

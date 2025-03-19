@@ -58,23 +58,43 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 
                 <!-- Image Gallery -->
-                <div class="space-y-6">
-                    <!-- Main Image -->
-                    <div class="glass-card">
-                        <img id="main-image" src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-96 object-contain rounded-lg transition-transform duration-300">
-                    </div>
+<div class="space-y-6">
+    <!-- Main Image -->
+    <div class="glass-card">
+        {% if product.image1 and product.image1.startswith('http') %}
+            <img id="main-image" src="{{ product.image1 }}" 
+                 alt="{{ product.name }}" 
+                 class="w-full h-96 object-contain rounded-lg transition-transform duration-300">
+        {% elif product.image1 %}
+            <img id="main-image" src="{{ url_for('static', filename=product.image1.split('static/')[-1]) }}" 
+                 alt="{{ product.name }}" 
+                 class="w-full h-96 object-contain rounded-lg transition-transform duration-300">
+        {% endif %}
+    </div>
 
-                    <!-- Thumbnails -->
-                    <div class="flex space-x-4 overflow-x-auto py-2">
-                        {% for image in [product.image1, product.image2, product.image3, product.image4] %}
-                            {% if image %}
-                                <img src="{{ image }}" alt="Thumbnail" 
-                                     class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-pink-500 transition-transform transform hover:scale-110 shadow-md" 
-                                     onclick="changeImage('{{ image }}')">
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
+    <!-- Thumbnails -->
+    <div class="flex space-x-4 overflow-x-auto py-2">
+        {% for image in [product.image1, product.image2, product.image3, product.image4] %}
+            {% if image %}
+                {% if image.startswith('http') %}
+                    <img src="{{ image }}" 
+                         alt="Thumbnail" 
+                         class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-pink-500 transition-transform transform hover:scale-110 shadow-md" 
+                         onclick="changeImage('{{ image }}')">
+                {% else %}
+                    {% set static_image = url_for('static', filename=image.split('static/')[-1]) %}
+                    <img src="{{ static_image }}" 
+                         alt="Thumbnail" 
+                         class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-pink-500 transition-transform transform hover:scale-110 shadow-md" 
+                         onclick="changeImage('{{ static_image }}')">
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+
+
 
                 <!-- Product Details -->
                 <div class="space-y-6">
@@ -137,13 +157,8 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-lg">&copy; 2025 BART-MART. All rights reserved.</p>
-            <p class="text-sm text-gray-400 mt-2">Designed with ❤️ for a better shopping experience.</p>
-        </div>
-    </footer>
+
+    {% include 'footer.html' %}
 
     <script>
         // Change the main image when a thumbnail is clicked

@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 
 import os
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/ecommerce"
-app.secret_key = "suba@123"
+app.config["MONGO_URI"] = "mongodb://localhost:27017/ecommerce";
+app.secret_key = "bartMart"
 app.config['SESSION_COOKIE_SECURE'] = False
 
 mongo = PyMongo(app)
@@ -88,8 +88,16 @@ def search_products():
     min_price = request.args.get("min_price", type=float)  # Minimum price filter
     max_price = request.args.get("max_price", type=float)  # Maximum price filter
 
-    # Build the MongoDB query
+    # Initialize search query
     search_query = {}
+
+    # Exclude products of the logged-in user
+    if "username" in session:
+        user = mongo.db.users.find_one({"username": session["username"]})
+        if user:
+            search_query["username"] = {"$ne": user["username"]}  # Exclude logged-in user's products
+
+    # Apply search filters
     if query:
         search_query["name"] = {"$regex": query, "$options": "i"}  # Case-insensitive search by name
     if category:
@@ -113,6 +121,7 @@ def search_products():
         products=products,
         user=session.get("username")
     )
+
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     if "username" not in session:
@@ -254,14 +263,16 @@ def login():
             # Check if password matches
             if bcrypt.check_password_hash(user["password"], password):
                 session["username"] = username
-                flash("Login successful!", "success")
-                return redirect(url_for("home"))
+                return redirect(url_for("home"))  # No success flash needed
             else:
-                flash("Incorrect password. Please try again.", "error")
+                flash("Incorrect password. Please try again.", "login_error")  # Specific category
+                return redirect(url_for("login"))  # Ensure it redirects
         else:
-            flash("Username not found. Please register first.", "error")
+            flash("Username not found. Please register first.", "login_error")  # Specific category
+            return redirect(url_for("login"))  # Ensure it redirects
 
     return render_template("login.html")
+
 
 @app.route("/sell", methods=["GET", "POST"])
 def sell():
@@ -271,22 +282,42 @@ def sell():
     user = mongo.db.users.find_one({"username": session["username"]})
 
     if request.method == "POST":
+        # Create the uploads directory if it doesn't exist
+        uploads_dir = os.path.join("static", "uploads")
+        os.makedirs(uploads_dir, exist_ok=True)
+
+        # Save uploaded images
+        image_paths = []
+        for i in range(1, 5):
+            image_file = request.files.get(f"image{i}")
+            if image_file and image_file.filename:
+                # Generate a unique filename
+                filename = f"{session['username']}_{datetime.now().strftime('%Y%m%d%H%M%S')}_{i}.{image_file.filename.split('.')[-1]}"
+                filepath = os.path.join(uploads_dir, filename)
+                image_file.save(filepath)
+                image_paths.append(f"static/uploads/{filename}")
+            else:
+                image_paths.append(None)
+
+        # Prepare product data
         product_data = {
             "username": session["username"],
             "name": request.form["name"],
             "category": request.form["category"],
             "description": request.form["description"],
-            "image1": request.form["image1"] if request.form["image1"] else None,
-            "image2": request.form["image2"] if request.form["image2"] else None,
-            "image3": request.form["image3"] if request.form["image3"] else None,
-            "image4": request.form["image4"] if request.form["image4"] else None,
+            "image1": image_paths[0],
+            "image2": image_paths[1],
+            "image3": image_paths[2],
+            "image4": image_paths[3],
             "price": int(request.form["price"]),
             "age_group": request.form["age_group"],
             "status": "Pending"
         }
 
+        # Insert product into the database
         product_id = mongo.db.sell_requests.insert_one(product_data).inserted_id
 
+        # Update the user's sold products list
         mongo.db.users.update_one(
             {"username": session["username"]},
             {"$push": {"sold_products": str(product_id)}}
@@ -742,7 +773,7 @@ def notifications():
 
     # Fetch all notifications for the logged-in user
     notifications = list(mongo.db.notifications.find({"receiver": session["username"]}).sort("date", -1))
-
+    
     # Mark all notifications as "read"
     mongo.db.notifications.update_many(
         {"receiver": session["username"], "status": "unread"},
@@ -755,7 +786,16 @@ def notifications():
         "status": "unread"
     })
 
-    return render_template("notifications.html", notifications=notifications, unread_notifications=unread_notifications, user=session.get("username"))
+    # Fetch the logged-in user's data (including coins)
+    user = mongo.db.users.find_one({"username": session["username"]})
+
+    return render_template(
+        "notifications.html",
+        notifications=notifications,
+        unread_notifications=unread_notifications,
+        user=user,  # Pass user data to the template
+    )
+
 
 @app.context_processor
 def inject_unread_notifications():

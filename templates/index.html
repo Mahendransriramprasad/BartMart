@@ -224,7 +224,7 @@
 </section>
 
 <!-- All Products Section -->
-<section id="all-products" class="py-20 px-3 min-h-screen bg-gradient-to-b from-orange-500 via-yellow-400 to-red-500">
+<section id="all-products" class="py-20 px-3 min-h-screen bg-gradient-to-b from-orange-500 via-yellow-400 to-red-200">
     <h2 class="text-4xl font-bold text-center mb-16">All Products</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {% if all_products %}
@@ -257,7 +257,7 @@
 
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gradient-to-b from-red-500 via-gray-200 to-white text-center">
+    <section id="contact" class="py-20 bg-gradient-to-b from-red-200 via-gray-200 to-green-500 text-center">
         <h2 class="text-4xl font-bold text-gray-800 mb-8">Contact Us</h2>
         <p class="text-lg text-gray-600 mb-12">For any inquiries, feel free to reach out to us!</p>
         <form action="#" method="POST" class="mt-6 max-w-lg mx-auto">
@@ -267,10 +267,56 @@
             <button type="submit" class="w-full px-6 py-2 bg-pink-500 text-white rounded-full font-bold hover:bg-pink-400">Send Message</button>
         </form>
     </section>
+    <!-- How It Works Section -->
+<section id="how-it-works" class="py-20 px-6 min-h-screen bg-gradient-to-b from-green-500 via-teal-400 to-blue-500">
+    <h2 class="text-4xl font-bold text-center text-white mb-16">How BartMart Works</h2>
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Step 1: Sell a Product -->
+        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+            <div class="text-6xl mb-4 text-green-500">1</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Sell a Product</h3>
+            <p class="text-gray-600">
+                List your product for sale. Once approved, it will be available for other users to purchase.
+            </p>
+        </div>
 
-    <footer class="text-center py-8 bg-gray-800 text-white">
-        <p>&copy; 2025 BART-MART. All rights reserved.</p>
-    </footer>
+        <!-- Step 2: Earn Coins -->
+        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+            <div class="text-6xl mb-4 text-teal-500">2</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Earn Coins</h3>
+            <p class="text-gray-600">
+                When your product is sold, you earn coins that you can use to buy other products on BartMart.
+            </p>
+        </div>
+
+        <!-- Step 3: Buy Products -->
+        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+            <div class="text-6xl mb-4 text-blue-500">3</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Buy Products</h3>
+            <p class="text-gray-600">
+                Use your coins to purchase products listed by other users. Negotiate prices to get the best deal!
+            </p>
+        </div>
+
+        <!-- Step 4: Trade Smartly -->
+        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+            <div class="text-6xl mb-4 text-purple-500">4</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Trade Smartly</h3>
+            <p class="text-gray-600">
+                BartMart is all about smart trading. Sell what you don't need and buy what you want!
+            </p>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-16">
+        <p class="text-xl text-white mb-6">Ready to start trading? Join BartMart today!</p>
+        <a href="{{ url_for('register') }}" class="px-8 py-4 bg-white text-gray-800 font-bold rounded-full hover:bg-gray-100 transition">
+            Get Started
+        </a>
+    </div>
+</section>
+{% include 'footer.html' %}
 
     <script>
     let currentIndex = 0;

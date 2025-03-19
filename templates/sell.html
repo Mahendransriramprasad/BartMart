@@ -9,7 +9,7 @@
     </h2>
 
     {% if user %}
-        <form action="{{ url_for('sell') }}" method="POST" class="w-full max-w-3xl space-y-8">
+        <form action="{{ url_for('sell') }}" method="POST" enctype="multipart/form-data" class="w-full max-w-3xl space-y-8">
             
             <!-- Product Name -->
             <div class="relative">
@@ -22,14 +22,32 @@
             </div>
 
             <!-- Category -->
-            <div>
-                <label for="category" class="block text-2xl font-bold text-white mb-2">Category:</label>
-                <div class="relative">
-                    <input type="text" id="category" name="category" required 
-                        class="w-full p-4 pl-12 text-lg border border-gray-300 rounded-xl shadow-lg focus:outline-none focus:ring-4 focus:ring-white hover:border-white transition-all bg-white bg-opacity-80 text-gray-900">
-                    <span class="absolute left-4 top-4 text-gray-600 text-xl">📂</span>
-                </div>
-            </div>
+<div>
+    <label for="category" class="block text-2xl font-bold text-white mb-2">Category:</label>
+    <div class="relative">
+        <select id="category" name="category" required 
+            class="w-full p-4 pl-12 text-lg border border-gray-300 rounded-xl shadow-lg focus:outline-none focus:ring-4 focus:ring-white hover:border-white transition-all bg-white bg-opacity-80 text-gray-900">
+            <option value="" disabled selected>Select a category</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Vehicle">Vehicle</option>
+            <option value="Books">Books</option>
+            <option value="Home & Garden">Home & Garden</option>
+            <option value="Toys">Toys</option>
+            <option value="Sports">Sports</option>
+            <option value="Health & Beauty">Health & Beauty</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Pets">Pets</option>
+            <option value="Art">Art</option>
+            <option value="Music">Music</option>
+            <option value="Tools">Tools</option>
+            <option value="Jewelry">Jewelry</option>
+            <option value="Other">Other</option>
+        </select>
+        <span class="absolute left-4 top-4 text-gray-600 text-xl">📂</span>
+    </div>
+</div>
+
 
             <!-- Product Description -->
             <div>
@@ -45,13 +63,13 @@
             <div>
                 <label class="block text-2xl font-bold text-white mb-2">Upload Product Images:</label>
                 <div class="grid grid-cols-2 gap-6">
-                    <input type="url" id="image1" name="image1" required placeholder="Enter image URL" 
+                    <input type="file" id="image1" name="image1" accept="image/*" required 
                         class="w-full p-3 text-lg border border-gray-300 rounded-xl shadow-lg focus:ring-4 focus:ring-white hover:border-white transition-all bg-white bg-opacity-80 text-gray-900">
-                    <input type="url" id="image2" name="image2" placeholder="Enter image URL" 
+                    <input type="file" id="image2" name="image2" accept="image/*" 
                         class="w-full p-3 text-lg border border-gray-300 rounded-xl shadow-lg focus:ring-4 focus:ring-white hover:border-white transition-all bg-white bg-opacity-80 text-gray-900">
-                    <input type="url" id="image3" name="image3" placeholder="Enter image URL" 
+                    <input type="file" id="image3" name="image3" accept="image/*" 
                         class="w-full p-3 text-lg border border-gray-300 rounded-xl shadow-lg focus:ring-4 focus:ring-white hover:border-white transition-all bg-white bg-opacity-80 text-gray-900">
-                    <input type="url" id="image4" name="image4" placeholder="Enter image URL" 
+                    <input type="file" id="image4" name="image4" accept="image/*" 
                         class="w-full p-3 text-lg border border-gray-300 rounded-xl shadow-lg focus:ring-4 focus:ring-white hover:border-white transition-all bg-white bg-opacity-80 text-gray-900">
                 </div>
             </div>
@@ -94,3 +112,5 @@
         </div>
     {% endif %}
 </div>
+
+{% include 'footer.html' %}
