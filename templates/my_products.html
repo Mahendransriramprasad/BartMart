@@ -145,7 +145,7 @@
                         {% for negotiation in negotiations %}
                             <tr class="border-b table-row-hover hover-scale">
                                 <td class="py-3 px-4">{{ negotiation.product_name }}</td>
-                                <td class="py-3 px-4">{{ negotiation.buyer_name }}</td>
+                                <td class="py-3 px-4">{{ negotiation.buyer }}</td>
                                 <td class="py-3 px-4">{{ negotiation.proposed_price }}</td>
                                 <td class="py-3 px-4">
                                     {% if negotiation.status == 'Pending' %}

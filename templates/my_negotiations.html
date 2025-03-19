@@ -5,7 +5,7 @@
     {% for negotiation in negotiations %}
         <li>
             Product: {{ negotiation.product_name }} <br>
-            Buyer: {{ negotiation.buyer }} <br>
+            Buyer: {{ negotiation.buyer }} <br> <!-- Display buyer's username -->
             Proposed Price: {{ negotiation.proposed_price }} <br>
             Status: {{ negotiation.status }} <br>
             {% if negotiation.status == "Pending" %}

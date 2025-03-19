@@ -676,10 +676,28 @@ def my_negotiations():
 
     user = mongo.db.users.find_one({"username": session["username"]})
     
-    # Find all negotiations where the user is the seller
-    negotiations = list(mongo.db.negotiations.find({"seller": user["username"], "status": "Pending"}))
+    # Fetch pending products (products submitted by the user that are still pending)
+    pending_products = list(mongo.db.products.find({
+        "username": user["username"],
+        "status": "Pending"
+    }))
 
-    return render_template("my_products.html", negotiations=negotiations, user=user)
+    # Fetch sold products (products submitted by the user that are approved)
+    sold_products = list(mongo.db.products.find({
+        "username": user["username"],
+        "status": "Approved"
+    }))
+
+    # Fetch negotiations where the user is the seller
+    negotiations = list(mongo.db.negotiations.find({"seller": user["username"]}))
+
+    return render_template(
+        "my_products.html",
+        pending_products=pending_products,
+        sold_products=sold_products,
+        negotiations=negotiations,
+        user=user
+    )
 
 @app.route("/approve_negotiation/<negotiation_id>")
 def approve_negotiation(negotiation_id):
@@ -696,6 +714,26 @@ def approve_negotiation(negotiation_id):
     product = mongo.db.products.find_one({"_id": ObjectId(negotiation["product_id"])})
     if not product:
         flash("Product not found.", "error")
+        return redirect(url_for("my_negotiations"))
+
+    # Check if the product is already sold or unavailable
+    if product.get("status") in ["Sold", "Unavailable"]:
+        # Update the negotiation status to "Rejected" with a reason
+        mongo.db.negotiations.update_one(
+            {"_id": ObjectId(negotiation_id)},
+            {"$set": {"status": "Rejected", "reason": "Product Unavailable"}}
+        )
+
+        # Add a notification for the buyer
+        notification_message = f"Sorry, your negotiation for {product['name']} has been rejected because the product is no longer available."
+        mongo.db.notifications.insert_one({
+            "receiver": negotiation["buyer"],
+            "message": notification_message,
+            "status": "unread",
+            "date": datetime.now()
+        })
+
+        flash("The product is no longer available. Negotiation rejected.", "error")
         return redirect(url_for("my_negotiations"))
 
     # Update the negotiation status to "Approved"
