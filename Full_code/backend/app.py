@@ -1,33 +1,63 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask import Flask, request, jsonify, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask_cors import CORS
-
+from bson.errors import InvalidId
+from bson import ObjectId, errors  # Import errors.InvalidId
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/ecommerce"
 app.secret_key = "Suba@123"
+CORS(app, supports_credentials=True)  # Enable CORS for React frontend
 
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
-
-# Enable CORS for all routes
-CORS(app)
 
 # Dummy Admin Credentials
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin123"
 
+# Helper Functions
 def calculate_age(dob):
     birth_date = datetime.strptime(dob, "%Y-%m-%d")
     today = datetime.today()
     return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
-# Home Page (Products Display)
+@app.route("/product/<product_id>", methods=["GET"])
+def get_product(product_id):
+    try:
+        print("Received Product ID:", product_id)  # Debugging
+
+        # Check if ID is an ObjectId or a string
+        if not ObjectId.is_valid(product_id):
+            print("Invalid ObjectId format")
+            return jsonify({"error": "Invalid Product ID format"}), 400
+
+        try:
+            product = mongo.db.products.find_one({"_id": ObjectId(product_id)})
+        except errors.InvalidId:  # Catching invalid ObjectId conversion error
+            print("Error: Invalid ObjectId conversion")
+            return jsonify({"error": "Invalid Product ID format"}), 400
+
+        if not product:
+            print("Product not found in DB")
+            return jsonify({"error": "Product not found"}), 404
+
+        product["_id"] = str(product["_id"])  # Convert ObjectId to string
+        return jsonify(product), 200
+
+    except Exception as e:
+        print("Error:", str(e))  # Debugging
+        return jsonify({"error": str(e)}), 500
+
+# Home Route - Fetch All Products
 @app.route("/", methods=["GET"])
 def home():
     products = list(mongo.db.products.find())
+    # Convert ObjectId to string for each product
+    for product in products:
+        product["_id"] = str(product["_id"])
     if "username" not in session:
         return jsonify({"all_products": products})
 
@@ -50,155 +80,71 @@ def home():
 # User Registration
 @app.route("/register", methods=["POST"])
 def register():
-    if request.is_json:
-        data = request.get_json()
-        username = data["username"]
-        password = bcrypt.generate_password_hash(data["password"]).decode('utf-8')
-        dob = data["dob"]
-    else:
-        username = request.form["username"]
-        password = bcrypt.generate_password_hash(request.form["password"]).decode('utf-8')
-        dob = request.form["dob"]
+    data = request.get_json()
+    username = data["username"]
+    password = bcrypt.generate_password_hash(data["password"]).decode('utf-8')
+    dob = data["dob"]
 
     existing_user = mongo.db.users.find_one({"username": username})
     if existing_user:
-        flash("Username already exists.", "error")
         return jsonify({"error": "Username already exists"}), 400
 
-    mongo.db.users.insert_one({"username": username, "password": password, "dob": dob, "coins": 100, "cart": {}})
-    flash("Registration successful!", "success")
-    return jsonify({"message": "Registration successful!"})
+    mongo.db.users.insert_one({
+        "username": username,
+        "password": password,
+        "dob": dob,
+        "coins": 100,
+        "cart": {},
+        "sold_products": [],
+        "avatar": None,
+        "bio": ""
+    })
+    return jsonify({"message": "Registration successful!"}), 201
 
-# User & Admin Login
+# User Login
 @app.route("/login", methods=["POST"])
 def login():
-    if request.is_json:
-        data = request.get_json()  # Ensure this is properly handled
-        try:
-            username = data["username"]
-            password = data["password"]
-        except KeyError as e:
-            return jsonify({"error": f"Missing field: {str(e)}"}), 400
-    else:
-        return jsonify({"error": "Expected JSON format"}), 400
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
 
-    # Simulate user lookup (you can replace this with real logic)
+    # Check for admin login
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        session["admin"] = True
+        return jsonify({"message": "Admin login successful!", "username": username}), 200
+
+    # Check for regular user login
     user = mongo.db.users.find_one({"username": username})
     if user and bcrypt.check_password_hash(user["password"], password):
-        session["username"] = username  # Store user session if login is successful
-        return jsonify({"message": "Login successful!"}), 200
-    else:
-        return jsonify({"error": "Invalid credentials"}), 400
+        session["username"] = username
+        return jsonify({"message": "Login successful!", "username": username}), 200
 
-@app.route("/sell", methods=["GET", "POST"])
-def sell():
-    if "username" not in session:
-        return redirect(url_for("login"))
+    return jsonify({"error": "Invalid credentials"}), 400
 
-    user = mongo.db.users.find_one({"username": session["username"]})
-
-    if request.method == "POST":
-        product_data = {
-            "username": session["username"],
-            "name": request.form["name"],
-            "category": request.form["category"],
-            "image": request.form["image"],
-            "price": int(request.form["price"]),
-            "age_group": request.form["age_group"],
-            "status": "Pending"
-        }
-        mongo.db.sell_requests.insert_one(product_data)
-        flash("Product submitted for review!", "success")
-        return redirect(url_for("home"))
-
-    return render_template("sell.html", user=user)
-
-@app.route("/admin/review_products")
-def review_products():
-    if "admin" not in session:
-        return redirect(url_for("login"))
-
-    pending_products = list(mongo.db.sell_requests.find({"status": "Pending"}))
-    return render_template("review_products.html", pending_products=pending_products)
-
-@app.route("/admin/approve_product/<request_id>")
-def approve_product(request_id):
-    if "admin" not in session:
-        return redirect(url_for("login"))
-
-    product = mongo.db.sell_requests.find_one({"_id": ObjectId(request_id)})
-    if product:
-        product["status"] = "Approved"
-        mongo.db.products.insert_one(product)
-        mongo.db.sell_requests.delete_one({"_id": ObjectId(request_id)})
-        mongo.db.users.update_one({"username": product["username"]}, {"$inc": {"coins": 100}})
-        flash("Product approved and added to store!", "success")
-    return redirect(url_for("review_products"))
-
-@app.route("/admin/reject_product/<request_id>")
-def reject_product(request_id):
-    if "admin" not in session:
-        return redirect(url_for("login"))
-
-    mongo.db.sell_requests.update_one({"_id": ObjectId(request_id)}, {"$set": {"status": "Rejected"}})
-    flash("Product rejected!", "error")
-    return redirect(url_for("review_products"))
-
-@app.route("/admin/dashboard", methods=["GET", "POST"])
-def admin_dashboard():
-    if "admin" not in session:
-        return redirect(url_for("login"))
-
-    if request.method == "POST":
-        product_data = {
-            "category": request.form["category"],
-            "name": request.form["name"],
-            "image": request.form["image"],
-            "price": int(request.form["price"]),
-            "age_group": request.form["age_group"]
-        }
-        mongo.db.products.insert_one(product_data)
-        flash("Product added successfully!", "success")
-
-    products = list(mongo.db.products.find())
-    sell_requests = list(mongo.db.sell_requests.find({"status": "Pending"}))
-    return render_template("admin_dashboard.html", products=products, sell_requests=sell_requests)
-
-@app.route("/admin/delete_product/<product_id>")
-def delete_product(product_id):
-    if "admin" not in session:
-        return redirect(url_for("login"))
-    mongo.db.products.delete_one({"_id": ObjectId(product_id)})
-    flash("Product deleted successfully!", "success")
-    return redirect(url_for("admin_dashboard"))
-
-# Add to Cart
-@app.route("/add_to_cart/<product_id>", methods=["GET"])
+@app.route("/add_to_cart/<product_id>", methods=["POST"])
 def add_to_cart(product_id):
     if "username" not in session:
         return jsonify({"error": "User not logged in"}), 401
 
     user = mongo.db.users.find_one({"username": session["username"]})
-    product = mongo.db.products.find_one({"_id": ObjectId(product_id)})
+    if not user:
+        return jsonify({"error": "User not found"}), 404
 
+    product = mongo.db.products.find_one({"_id": ObjectId(product_id)})
     if not product:
         return jsonify({"error": "Product not found"}), 404
 
-    cart = mongo.db.carts.find_one({"username": user["username"]})
+    cart = mongo.db.carts.find_one({"username": session["username"]})
+    if not cart:
+        cart = {"username": session["username"], "items": []}
+        mongo.db.carts.insert_one(cart)
 
-    if cart:
-        for item in cart["items"]:
-            if item["_id"] == str(product_id):
-                item["quantity"] += 1
-                break
-        else:
-            cart["items"].append({"_id": str(product_id), "quantity": 1})
+    mongo.db.carts.update_one(
+        {"username": session["username"]},
+        {"$push": {"items": {"_id": product_id, "quantity": 1}}}
+    )
 
-        mongo.db.carts.update_one({"username": user["username"]}, {"$set": {"items": cart["items"]}})
-    else:
-        mongo.db.carts.insert_one({"username": user["username"], "items": [{"_id": str(product_id), "quantity": 1}]})
-
-    return jsonify({"message": "Product added to cart successfully"})
+    return jsonify({"message": "Product added to cart"}), 200
 
 # View Cart
 @app.route("/cart", methods=["GET"])
@@ -223,30 +169,7 @@ def cart():
             total_cost += product["price"] * item["quantity"]
 
     return jsonify({"cart_items": cart_items, "total_cost": total_cost})
-
-@app.route("/update_cart_quantity/<product_id>/<action>", methods=["GET"])
-def update_cart_quantity(product_id, action):
-    if "username" not in session:
-        return jsonify({"error": "User not logged in"}), 401
-
-    cart = mongo.db.carts.find_one({"username": session["username"]})
-
-    if not cart or "items" not in cart:
-        return jsonify({"error": "No items in cart"}), 404
-
-    for item in cart["items"]:
-        if item["_id"] == product_id:
-            if action == "increase":
-                item["quantity"] += 1
-            elif action == "decrease" and item["quantity"] > 1:
-                item["quantity"] -= 1
-            break
-
-    # Update the cart in the database
-    mongo.db.carts.update_one({"username": session["username"]}, {"$set": {"items": cart["items"]}})
-
-    return jsonify({"message": "Cart updated successfully"})
-
+# Checkout
 @app.route("/checkout", methods=["POST"])
 def checkout():
     if "username" not in session:
@@ -258,49 +181,55 @@ def checkout():
     if not cart or "items" not in cart or len(cart["items"]) == 0:
         return jsonify({"error": "Cart is empty"}), 400
 
-    # Calculate total cost
     total_cost = sum(item["quantity"] * mongo.db.products.find_one({"_id": ObjectId(item["_id"])})["price"] for item in cart["items"])
 
-    # Check if user has enough coins
     if user["coins"] < total_cost:
         return jsonify({"error": "Not enough coins to complete the purchase"}), 400
 
-    # Deduct coins
     mongo.db.users.update_one({"username": session["username"]}, {"$inc": {"coins": -total_cost}})
-
-    # Clear the cart after checkout
     mongo.db.carts.update_one({"username": session["username"]}, {"$set": {"items": []}})
 
-    return jsonify({"message": "Checkout successful"})
+    return jsonify({"message": "Checkout successful"}), 200
+# Admin Dashboard - Fetch All Products and Pending Requests
+@app.route("/admin/dashboard", methods=["GET"])
+def admin_dashboard():
+    if "admin" not in session:
+        return jsonify({"error": "Admin not logged in"}), 401
 
-@app.route("/checkout_success", methods=["GET"])
-def checkout_success():
-    if "username" not in session:
-        return jsonify({"error": "User not logged in"}), 401
+    products = list(mongo.db.products.find())
+    sell_requests = list(mongo.db.sell_requests.find({"status": "Pending"}))
+    return jsonify({"products": products, "sell_requests": sell_requests})
+# Admin Approve Product
+@app.route("/admin/approve_product/<request_id>", methods=["POST"])
+def approve_product(request_id):
+    if "admin" not in session:
+        return jsonify({"error": "Admin not logged in"}), 401
 
-    user = mongo.db.users.find_one({"username": session["username"]})
+    product = mongo.db.sell_requests.find_one({"_id": ObjectId(request_id)})
+    if product:
+        product["status"] = "Approved"
+        mongo.db.products.insert_one(product)
+        mongo.db.sell_requests.delete_one({"_id": ObjectId(request_id)})
+        mongo.db.users.update_one({"username": product["username"]}, {"$inc": {"coins": 100}})
+        return jsonify({"message": "Product approved and added to store!"}), 200
 
-    return jsonify({"message": "Checkout complete", "user": user})
+    return jsonify({"error": "Product not found"}), 404
 
-@app.route("/remove_from_cart/<product_id>", methods=["GET"])
-def remove_from_cart(product_id):
-    if "username" not in session:
-        return jsonify({"error": "User not logged in"}), 401
+# Admin Reject Product
+@app.route("/admin/reject_product/<request_id>", methods=["POST"])
+def reject_product(request_id):
+    if "admin" not in session:
+        return jsonify({"error": "Admin not logged in"}), 401
 
-    cart = mongo.db.carts.find_one({"username": session["username"]})
-
-    if cart:
-        cart["items"] = [item for item in cart["items"] if str(item["_id"]) != product_id]
-        mongo.db.carts.update_one({"username": session["username"]}, {"$set": {"items": cart["items"]}})
-
-    return jsonify({"message": "Item removed from cart successfully"})
+    mongo.db.sell_requests.update_one({"_id": ObjectId(request_id)}, {"$set": {"status": "Rejected"}})
+    return jsonify({"message": "Product rejected!"}), 200
 
 # Logout
-@app.route("/logout", methods=["GET"])
+@app.route("/logout", methods=["POST"])
 def logout():
     session.pop("username", None)
     session.pop("admin", None)
-    return redirect(url_for("home"))
+    return jsonify({"message": "Logged out successfully"}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)

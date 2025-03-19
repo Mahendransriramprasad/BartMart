@@ -1,0 +1,67 @@
+/* Scoped styles for the login form */
+.login-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    text-align: center;
+    margin: 50px auto;
+  }
+  
+  /* Title */
+  .login-container h1 {
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  /* Input fields */
+  .login-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  /* Button */
+  .login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+  
+  .login-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Error message */
+  .login-container .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  /* Signup redirection */
+  .login-container .signup-link {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .login-container .signup-link span {
+    color: #007bff;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .login-container .signup-link span:hover {
+    text-decoration: underline;
+  }
+  

@@ -7,7 +7,7 @@ import Cart from './components/Cart';
 import Sell from './components/SellProduct';
 import Checkout from './components/Checkout';
 import Navbar from './components/Navbar';
-
+import ProductDetails from './pages/ProductDetails';
 function App() {
   return (
     <Router>
@@ -19,6 +19,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/product/:productId" element={<ProductDetails />} />
       </Routes>
     </Router>
   );

@@ -1,31 +1,61 @@
 {% include 'header.html' %}
-<h1 style="text-align: center; font-size: 2.5rem; margin-bottom: 30px; color: #2c3e50;">Pending Product Approvals</h1>
 
-<div style="width: 80%; margin: 0 auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+<div class="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h1 class="text-center text-3xl font-semibold text-gray-800 mb-6">Pending Product Approvals</h1>
+
     {% if pending_products %}
-        <ul style="list-style-type: none; padding: 0;">
+        <ul class="space-y-6">
             {% for request in pending_products %}
-                <li style="display: flex; align-items: center; padding: 20px; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
-                    <img src="{{ request.image }}" alt="{{ request.name }}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px; margin-right: 20px;">
-                    <div style="flex-grow: 1;">
-                        <p style="font-size: 1.3rem; font-weight: bold; color: #333;">{{ request.name }}</p>
-                        <p><strong>Category:</strong> {{ request.category }}</p>
-                        <p><strong>Price:</strong> {{ request.price }} 🪙 Coins</p>
-                        <p><strong>Age Group:</strong> {{ request.age_group }}</p>
-                        <p><strong>Status:</strong> {{ request.status }}</p>
+                <li class="flex flex-col md:flex-row items-center p-4 border rounded-lg shadow-sm bg-gray-100">
+                    
+                    <!-- Product Images -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 p-2">
+                        {% if request.image1 %}
+                            <img src="{{ request.image1 }}" alt="{{ request.name }}" class="w-24 h-24 object-cover rounded-md border">
+                        {% endif %}
+                        {% if request.image2 %}
+                            <img src="{{ request.image2 }}" alt="{{ request.name }}" class="w-24 h-24 object-cover rounded-md border">
+                        {% endif %}
+                        {% if request.image3 %}
+                            <img src="{{ request.image3 }}" alt="{{ request.name }}" class="w-24 h-24 object-cover rounded-md border">
+                        {% endif %}
+                        {% if request.image4 %}
+                            <img src="{{ request.image4 }}" alt="{{ request.name }}" class="w-24 h-24 object-cover rounded-md border">
+                        {% endif %}
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
-                        <a href="{{ url_for('approve_product', request_id=request._id) }}" style="padding: 10px 20px; background-color: #2ecc71; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s ease;">Approve</a>
-                        <a href="{{ url_for('reject_product', request_id=request._id) }}" style="padding: 10px 20px; background-color: #e74c3c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s ease;">Reject</a>
+
+                    <!-- Product Details -->
+                    <div class="flex-grow px-4">
+                        <p class="text-xl font-semibold text-gray-800">{{ request.name }}</p>
+                        <p class="text-gray-600"><strong>Category:</strong> {{ request.category }}</p>
+                        <p class="text-gray-600"><strong>Price:</strong> {{ request.price }} 🪙 Coins</p>
+                        <p class="text-gray-600"><strong>Age Group:</strong> {{ request.age_group }}</p>
+                        <p class="text-gray-600"><strong>Status:</strong> {{ request.status }}</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col space-y-3">
+                        <a href="{{ url_for('approve_product', request_id=request._id) }}" 
+                           class="px-5 py-2 bg-green-500 text-white text-center font-semibold rounded-md shadow hover:bg-green-600 transition">
+                            Approve
+                        </a>
+                        <a href="{{ url_for('reject_product', request_id=request._id) }}" 
+                           class="px-5 py-2 bg-red-500 text-white text-center font-semibold rounded-md shadow hover:bg-red-600 transition">
+                            Reject
+                        </a>
                     </div>
                 </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p style="text-align: center; font-size: 1.2rem; color: #e74c3c;">No pending product approvals at the moment.</p>
+        <p class="text-center text-lg text-red-500">No pending product approvals at the moment.</p>
     {% endif %}
 </div>
 
-<div style="text-align: center; margin-top: 20px;">
-    <a href="{{ url_for('admin_dashboard') }}" style="padding: 12px 24px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-size: 1.1rem; font-weight: bold; transition: background-color 0.3s ease;">Back to Dashboard</a>
+<!-- Back to Dashboard Button -->
+<div class="text-center mt-6">
+    <a href="{{ url_for('admin_dashboard') }}" 
+       class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 transition">
+        Back to Dashboard
+    </a>
 </div>

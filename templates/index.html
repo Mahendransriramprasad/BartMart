@@ -10,7 +10,6 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            
         }
         .gradient-bg {
             background: linear-gradient(135deg, #f9fafb, #e5e7eb);
@@ -28,230 +27,237 @@
             object-fit: cover;
             border-radius: 0.5rem;
         }
-      /* Full-screen container */
-#carousel-container {
-    position: relative;
-    overflow: hidden;
-    width: 100vw; /* Full screen width */
-    height: 100vh; /* Full screen height */
-}
+        /* Fullscreen container */
+    #carousel-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+    }
 
-/* Carousel slides */
-#carousel {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
+    /* Slides */
+    .carousel-slide {
+        flex: 0 0 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
 
-.carousel-slide {
-    flex: 0 0 100vw; /* Each slide takes full screen width */
-    height: 100vh; /* Full height */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: white;
-}
+    /* Image styling */
+    .offer-image {
+        width: 80%;
+        max-height: 400px;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    }
 
-/* Images fit screen properly */
-.offer-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ensures full coverage without stretching */
-}
+    /* Navigation buttons */
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        padding: 15px 20px;
+        cursor: pointer;
+        border-radius: 50%;
+        font-size: 24px;
+        transition: background 0.3s;
+    }
 
-/* Navigation buttons */
-.carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    border: none;
-    padding: 15px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 20px;
-    transition: background 0.3s;
-}
+    .carousel-btn:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
 
-.carousel-btn:hover {
-    background: rgba(0, 0, 0, 0.8);
-}
+    /* Indicators */
+    .carousel-indicators {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+    }
 
-#prevBtn {
-    left: 20px;
-}
+    .carousel-indicator {
+        width: 12px;
+        height: 12px;
+        margin: 0 5px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
 
-#nextBtn {
-    right: 20px;
-}
-
-/* Indicator styles */
-.carousel-indicators {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-}
-
-.carousel-indicator {
-    width: 12px;
-    height: 12px;
-    margin: 0 5px;
-    background-color: #bbb;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.carousel-indicator.active {
-    background-color: white;
-    transform: scale(1.3);
-}
-
+    .carousel-indicator.active {
+        background-color: white;
+        transform: scale(1.3);
+    }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800 ">
 
     {% include 'header.html' %}
-
+    {% include 'header2.html' %}
     <!-- Home Section -->
-    <section id="home" class="py-20 gradient-bg text-center">
+    <section id="home" class="py-20 min-h-screen bg-gradient-to-b from-cyan-500 via-sky-400 to-blue-500 py-12 px-6 text-center ">
         <div class="container mx-auto px-6">
-            <h1 class="text-5xl font-bold text-gray-800 mb-6">Welcome to BART-MART</h1>
-            <p class="text-xl text-gray-600 mb-12">Trade smartly & save points.</p>
+            <h1 class="text-5xl font-bold text-orange-800 mb-6">Welcome to BART-MART</h1>
+            <p class="text-xl text-orange-700 mb-12">Trade smartly & save points.</p>
             
-            <!-- Carousel -->
-            <div class="relative w-full max-w-6xl mx-auto overflow-hidden rounded-xl shadow-lg">
-                <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
+          
+            <div class="min-h-screen overflow-hidden relative">
+                <!-- Slides Container -->
+                <div id="carousel" class="flex transition-transform duration-700 ease-in-out">
                     <!-- Slide 1 -->
-                    <div class="flex-none w-full bg-white p-6 cursor-pointer hover-scale" data-scroll-to="suggested-products">
-                        <img src="../static/offer1.webp" alt="Offer 1" class="offer-image">
-                        <p class="text-lg font-semibold text-gray-700 mt-4">Join the Bart Mart Community</p>
+                    <div class="w-full h-full flex-shrink-0 relative">
+                        <img src="../static/offer1.webp" alt="Offer 1" class="w-full h-full object-cover brightness-75">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <a href="#suggested-products" class="text-white text-3xl md:text-5xl font-bold bg-black bg-opacity-50 px-6 py-3 rounded-lg hover:bg-opacity-80 transition">
+                                Join the Bart Mart Community
+                            </a>
+                        </div>
                     </div>
                     <!-- Slide 2 -->
-                    <div class="flex-none w-full bg-white p-6 cursor-pointer hover-scale" data-scroll-to="recommended-products">
-                        <img src="../static/offer2.avif" alt="Offer 2" class="offer-image">
-                        <p class="text-lg font-semibold text-gray-700 mt-4">Get Started Now!</p>
+                    <div class="w-full h-full flex-shrink-0 relative">
+                        <img src="../static/offer2.avif" alt="Offer 2" class="w-full h-full object-cover brightness-75">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <a href="#recommended-products" class="text-white text-3xl md:text-5xl font-bold bg-black bg-opacity-50 px-6 py-3 rounded-lg hover:bg-opacity-80 transition">
+                                Get Started Now!
+                            </a>
+                        </div>
                     </div>
                     <!-- Slide 3 -->
-                    <div class="flex-none w-full bg-white p-6 cursor-pointer hover-scale" data-scroll-to="all-products">
-                        <img src="../static/offer3.jpg" alt="Offer 3" class="offer-image">
-                        <p class="text-lg font-semibold text-gray-700 mt-4">Join now and start bartering!</p>
+                    <div class="w-full h-full flex-shrink-0 relative">
+                        <img src="../static/offer3.jpg" alt="Offer 3" class="w-full h-full object-cover brightness-75">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <a href="#all-products" class="text-white text-3xl md:text-5xl font-bold bg-black bg-opacity-50 px-6 py-3 rounded-lg hover:bg-opacity-80 transition">
+                                Join now and start bartering!
+                            </a>
+                        </div>
                     </div>
                 </div>
+            
                 <!-- Navigation Buttons -->
-                <button id="prevBtn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-100">
-                    <i class="fas fa-chevron-left text-gray-700"></i>
+                <button id="prevBtn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-40 text-white p-3 rounded-full hover:bg-opacity-70 transition">
+                    &#10094;
                 </button>
-                <button id="nextBtn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-100">
-                    <i class="fas fa-chevron-right text-gray-700"></i>
+                <button id="nextBtn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-40 text-white p-3 rounded-full hover:bg-opacity-70 transition">
+                    &#10095;
                 </button>
+            
                 <!-- Indicators -->
-                <div class="carousel-indicators">
-                    <span class="carousel-indicator" data-index="0"></span>
-                    <span class="carousel-indicator" data-index="1"></span>
-                    <span class="carousel-indicator" data-index="2"></span>
+                <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    <div class="carousel-indicator w-4 h-4 rounded-full bg-gray-400 cursor-pointer transition-all" data-index="0"></div>
+                    <div class="carousel-indicator w-4 h-4 rounded-full bg-gray-400 cursor-pointer transition-all" data-index="1"></div>
+                    <div class="carousel-indicator w-4 h-4 rounded-full bg-gray-400 cursor-pointer transition-all" data-index="2"></div>
                 </div>
             </div>
+            
+
+
+
         </div>
     </section>
 
-    <!-- Suggested Products Section -->
-    <section id="suggested-products" class="max-w-6xl mx-auto px-6 py-20 bg-gray-100">
-        <h2 class="text-4xl font-bold text-gray-800 text-center mb-16">Suggested Products</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% if suggested_products %}
-                {% for product in suggested_products %}
-                    <div class="bg-white rounded-lg p-6 text-center shadow-lg hover-scale">
-                        <a href="{{ url_for('product_detail', product_id=product._id) }}">
-                            <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
-                        </a>
-                        <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
-                        <p class="text-xl font-semibold text-gray-900 inline-flex items-center">
-                            {{ product.price }} 
-                            <svg class="w-6 h-6 ml-2 coin-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.5 4.5l1.5 1.5M19.5 4.5l-1.5 1.5M4.5 19.5l1.5-1.5M19.5 19.5l-1.5-1.5" />
-                            </svg>
-                        </p>
-                        
-                        <div class="mt-4 space-x-4">
-                            <a href="{{ url_for('add_to_cart', product_id=product._id) }}" class="px-6 py-2 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-400">Add to Cart</a>
-                            <a href="{{ url_for('negotiate_price', product_id=product._id) }}" class="px-6 py-2 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-400">Negotiate</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-center text-gray-500">No suggested products available.</p>
-            {% endif %}
-        </div>
-    </section>
-
-    <!-- Recommended Products Section -->
-    <section id="recommended-products" class="max-w-6xl mx-auto px-6 py-20 bg-white">
-        <h2 class="text-4xl font-bold text-gray-800 text-center mb-16">Recommended Products</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% if recommended_products %}
-                {% for product in recommended_products %}
-                    <div class="bg-white rounded-lg p-6 text-center shadow-lg hover-scale">
-                        <a href="{{ url_for('product_detail', product_id=product._id) }}">
-                            <img src="{{ product.image }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
-                        </a>
-                        <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
-                        <p class="text-xl font-semibold text-gray-900 inline-flex items-center">
-                            {{ product.price }} 
-                            <svg class="w-6 h-6 ml-2 coin-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.5 4.5l1.5 1.5M19.5 4.5l-1.5 1.5M4.5 19.5l1.5-1.5M19.5 19.5l-1.5-1.5" />
-                            </svg>
-                        </p>
-                        
-                        <div class="mt-4 space-x-4">
-                            <a href="{{ url_for('add_to_cart', product_id=product._id) }}" class="px-6 py-2 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-400">Add to Cart</a>
-                            <a href="{{ url_for('negotiate_price', product_id=product._id) }}" class="px-6 py-2 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-400">Negotiate</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-center text-gray-500">No recommendations yet. Start browsing!</p>
-            {% endif %}
-        </div>
-    </section>
-
-    <!-- All Products Section -->
-    <section id="all-products" class="max-w-6xl mx-auto px-6 py-20 bg-gray-100">
-        <h2 class="text-4xl font-bold text-gray-800 text-center mb-16">All Products</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for product in all_products %}
-                <div class="bg-white rounded-lg p-6 text-center shadow-lg hover-scale">
+<!-- Suggested Products Section -->
+<section id="suggested-products" class="py-20 px-6 min-h-screen bg-gradient-to-b from-blue-500 via-indigo-400 to-purple-500">
+    <h2 class="text-4xl font-bold text-center mb-16">Suggested Products</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% if suggested_products %}
+            {% for product in suggested_products %}
+                <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
                     <a href="{{ url_for('product_detail', product_id=product._id) }}">
                         <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
                     </a>
                     <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
-                    <p class="text-xl font-semibold text-gray-900 inline-flex items-center">
-                        {{ product.price }} 
-                        <svg class="w-6 h-6 ml-2 coin-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.5 4.5l1.5 1.5M19.5 4.5l-1.5 1.5M4.5 19.5l1.5-1.5M19.5 19.5l-1.5-1.5" />
-                        </svg>
-                    </p>
-                    
+                    <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
+                    <div class="mt-4 flex justify-center space-x-4">
+                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
+                           class="px-6 py-3 w-full text-lg flex-1 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-400">
+                            Add to Cart
+                        </a>
+                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
+                           class="px-6 py-3 w-full text-lg flex-1 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-400">
+                            Negotiate
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center text-gray-200">No suggested products available.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Recommended Products Section -->
+<section id="recommended-products" class="py-20 px-4 min-h-screen bg-gradient-to-b from-purple-500 via-pink-400 to-orange-500">
+    <h2 class="text-4xl font-bold text-center mb-16">Recommended Products</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        {% if recommended_products %}
+            {% for product in recommended_products %}
+                <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                    <a href="{{ url_for('product_detail', product_id=product._id) }}">
+                        <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                    </a>
+                    <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
+                    <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
+                    <div class="mt-4 flex justify-center space-x-4">
+                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
+                           class="w-40 py-3 text-lg font-bold text-white bg-pink-500 rounded-full hover:bg-pink-400 text-center">
+                            Add to Cart
+                        </a>
+                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
+                           class="w-40 py-3 text-lg font-bold text-white bg-blue-500 rounded-full hover:bg-blue-400 text-center">
+                            Negotiate
+                        </a>
+                    </div>                    
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center text-gray-200">No recommendations available. Start shopping to get personalized recommendations!</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- All Products Section -->
+<section id="all-products" class="py-20 px-3 min-h-screen bg-gradient-to-b from-orange-500 via-yellow-400 to-red-500">
+    <h2 class="text-4xl font-bold text-center mb-16">All Products</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        {% if all_products %}
+            {% for product in all_products %}
+                <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                    <a href="{{ url_for('product_detail', product_id=product._id) }}">
+                        <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                    </a>
+                    <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
+                    <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
                     {% if user %}
-                        <div class="mt-4 space-x-4">
-                            <a href="{{ url_for('add_to_cart', product_id=product._id) }}" class="px-6 py-2 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-400">Add to Cart</a>
-                            <a href="{{ url_for('negotiate_price', product_id=product._id) }}" class="px-6 py-2 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-400">Negotiate</a>
-                        </div>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
+                               class="w-40 py-3 text-lg font-bold text-white bg-pink-500 rounded-full hover:bg-pink-400 text-center">
+                                Add to Cart
+                            </a>
+                            <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
+                               class="w-40 py-3 text-lg font-bold text-white bg-blue-500 rounded-full hover:bg-blue-400 text-center">
+                                Negotiate
+                            </a>
+                        </div>                
                     {% endif %}
                 </div>
             {% endfor %}
-        </div>
-    </section>
+        {% else %}
+            <p class="text-center text-gray-200">No products available.</p>
+        {% endif %}
+    </div>
+</section>
+
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-white text-center">
+    <section id="contact" class="py-20 bg-gradient-to-b from-red-500 via-gray-200 to-white text-center">
         <h2 class="text-4xl font-bold text-gray-800 mb-8">Contact Us</h2>
         <p class="text-lg text-gray-600 mb-12">For any inquiries, feel free to reach out to us!</p>
         <form action="#" method="POST" class="mt-6 max-w-lg mx-auto">
@@ -267,42 +273,41 @@
     </footer>
 
     <script>
-        // JavaScript for Carousel
-        const carousel = document.getElementById('carousel');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const indicators = document.querySelectorAll('.carousel-indicator');
-        let currentIndex = 0;
+    let currentIndex = 0;
+const slides = document.querySelectorAll("#carousel > div"); // Select only the slide divs
+const indicators = document.querySelectorAll(".carousel-indicator");
+const carousel = document.getElementById("carousel");
+const totalSlides = slides.length;
 
-        function updateCarousel() {
-            const offset = -currentIndex * 100;
-            carousel.style.transform = `translateX(${offset}%)`;
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === currentIndex);
-            });
-        }
+// Ensure #carousel is wide enough for all slides
+carousel.style.width = `${totalSlides * 100}%`;
+slides.forEach(slide => slide.style.width = `${100 / totalSlides}%`);
 
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % 3;
-            updateCarousel();
-        }
+function showSlide(index) {
+    currentIndex = (index + totalSlides) % totalSlides;
+    
+    // Move the carousel
+    carousel.style.transform = `translateX(-${currentIndex * (100 / totalSlides)}%)`;
 
-        function prevSlide() {
-            currentIndex = (currentIndex - 1 + 3) % 3;
-            updateCarousel();
-        }
+    // Update active indicator
+    indicators.forEach((dot, i) => {
+        dot.classList.toggle("bg-white", i === currentIndex);
+        dot.classList.toggle("scale-125", i === currentIndex);
+    });
+}
 
-        nextBtn.addEventListener('click', nextSlide);
-        prevBtn.addEventListener('click', prevSlide);
+// Add event listeners for buttons
+document.getElementById("prevBtn").addEventListener("click", () => showSlide(currentIndex - 1));
+document.getElementById("nextBtn").addEventListener("click", () => showSlide(currentIndex + 1));
 
-        indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
-                currentIndex = index;
-                updateCarousel();
-            });
-        });
+// Add event listeners for indicators
+indicators.forEach(dot => {
+    dot.addEventListener("click", () => showSlide(parseInt(dot.getAttribute("data-index"))));
+});
 
-        setInterval(nextSlide, 5000);
+// Auto-slide every 5 seconds
+setInterval(() => showSlide(currentIndex + 1), 5000);
+
     </script>
 </body>
 </html>

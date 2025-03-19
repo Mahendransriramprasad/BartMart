@@ -158,8 +158,8 @@
                                 </td>
                                 <td class="py-3 px-4">
                                     {% if negotiation.status == 'Pending' %}
-                                        <a href="{{ url_for('approve_negotiation', negotiation_id=negotiation.id) }}" class="negotiate-link">Approve</a> |
-                                        <a href="{{ url_for('reject_negotiation', negotiation_id=negotiation.id) }}" class="negotiate-link">Reject</a>
+                                        <a href="{{ url_for('approve_negotiation', negotiation_id=negotiation._id) }}" class="negotiate-link">Approve</a> |
+                                        <a href="{{ url_for('reject_negotiation', negotiation_id=negotiation._id) }}" class="negotiate-link">Reject</a>
                                     {% else %}
                                         N/A
                                     {% endif %}

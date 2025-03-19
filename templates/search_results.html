@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - BART-MART</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    {% include 'header.html' %}
+
+    <!-- Search Results Section -->
+    <section id="search-results" class="py-20 px-6 min-h-screen bg-gradient-to-b from-blue-500 via-indigo-400 to-purple-500">
+        <div class="container mx-auto">
+            <!-- Search Bar -->
+            <form action="{{ url_for('search_products') }}" method="GET" class="mb-8 flex justify-center">
+                <input
+                    type="text"
+                    name="query"
+                    placeholder="Search products..."
+                    value="{{ query }}"
+                    class="px-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                    type="submit"
+                    class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                >
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+
+            <!-- Category Filters -->
+            <div class="mb-8 flex flex-wrap justify-center gap-2">
+                {% set categories = ["Electronics", "Clothing", "Vehicle", "Books", "Home & Garden", "Toys", "Sports", "Health & Beauty", "Furniture", "Pets", "Art", "Music", "Tools", "Jewelry", "Other"] %}
+                {% for cat in categories %}
+                    <a
+                        href="{{ url_for('search_products', query=query, category=cat, min_price=min_price, max_price=max_price) }}"
+                        class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition {{ 'bg-blue-500' if category == cat else '' }}"
+                    >
+                        {{ cat }}
+                    </a>
+                {% endfor %}
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="mb-8 flex justify-center space-x-4">
+                <form action="{{ url_for('search_products') }}" method="GET" class="flex items-center space-x-4">
+                    <input
+                        type="number"
+                        name="min_price"
+                        placeholder="Min Price"
+                        value="{{ min_price if min_price is not none else '' }}"
+                        class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                        type="number"
+                        name="max_price"
+                        placeholder="Max Price"
+                        value="{{ max_price if max_price is not none else '' }}"
+                        class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input type="hidden" name="query" value="{{ query }}">
+                    <input type="hidden" name="category" value="{{ category }}">
+                    <button
+                        type="submit"
+                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                    >
+                        Apply Price Filter
+                    </button>
+                </form>
+            </div>
+
+            <!-- Search Results -->
+            <h2 class="text-4xl font-bold text-center mb-16">
+                {% if query %}
+                    Search Results for "{{ query }}"
+                {% elif category %}
+                    Products in "{{ category }}"
+                {% else %}
+                    All Products
+                {% endif %}
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% if products %}
+                    {% for product in products %}
+                        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                            <a href="{{ url_for('product_detail', product_id=product._id) }}">
+                                <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                            </a>
+                            <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
+                            <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
+                            <div class="mt-4 flex justify-center space-x-4">
+                                <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
+                                   class="px-6 py-3 w-full text-lg flex-1 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-400">
+                                    Add to Cart
+                                </a>
+                                <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
+                                   class="px-6 py-3 w-full text-lg flex-1 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-400">
+                                    Negotiate
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-gray-200">No products found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-8 bg-gray-800 text-white">
+        <p>&copy; 2025 BART-MART. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -63,9 +63,25 @@
                 <a href="{{ url_for('my_products') }}" class="text-lg hover:text-orange-500 transition-colors">
                     <i class="fas fa-boxes"></i> Sold
                 </a>
+
+                <!-- Purchased Items Link -->
+                <a href="{{ url_for('purchased_items') }}" class="text-lg hover:text-orange-500 transition-colors">
+                    <i class="fas fa-history"></i> Purchased Items
+                </a>
+                <!-- Notification Icon -->
+        <div class="relative">
+            <a href="{{ url_for('notifications') }}" class="text-white hover:text-orange-500 transition-colors">
+                <i class="fas fa-bell"></i>
+                {% if unread_notifications > 0 %}
+                    <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
+                        {{ unread_notifications }}
+                    </span>
+                {% endif %}
+            </a>
+        </div>
             {% endif %}
         </div>
-
+        
         <!-- Right Section: User Info and Actions -->
         <div class="flex items-center space-x-6">
             {% if session.admin or session.username %}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Purchased Items</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    {% include 'header.html' %}
+
+    <h2 class="text-center text-4xl font-bold mb-8 mt-12">Your Purchased Items</h2>
+
+    {% if purchase_history %}
+        <div class="max-w-6xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+            <ul class="space-y-6">
+                {% for purchase in purchase_history %}
+                    <li class="flex items-center justify-between p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <div class="flex-grow">
+                            <p class="text-xl font-semibold">{{ purchase.name }}</p>
+                            <p class="text-lg text-gray-600">Category: {{ purchase.category }}</p>
+                            <p class="text-lg text-gray-600">Quantity: {{ purchase.quantity }}</p>
+                            <p class="text-lg text-gray-600">Price: {{ purchase.price }} Coins</p>
+                            <p class="text-sm text-gray-500">Purchased on: {{ purchase.purchase_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p class="text-center text-lg text-gray-700 mt-8">You haven't purchased anything yet.</p>
+    {% endif %}
+
+    <a href="{{ url_for('home') }}" class="block text-center mt-8 py-3 px-6 bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-600 transition-colors max-w-xs mx-auto">Back to Home</a>
+
+</body>
+</html>

@@ -1,50 +1,156 @@
 {% extends "header.html" %}
 
 {% block content %}
-<div class="container mx-auto p-6 flex justify-center">
-    <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
-        <h1 class="text-4xl font-bold text-gray-800 text-center mb-6">Profile</h1>
+<div class="min-h-screen bg-gray-100 flex items-center justify-center p-8">
+    <div class="bg-white shadow-lg rounded-xl w-full max-w-4xl p-8 relative">
+        
+        <!-- Avatar Section -->
+        <div class="flex flex-col items-center">
+            {% if user.avatar %}
+                <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}" 
+                     alt="Avatar" 
+                     class="w-32 h-32 rounded-full border-4 border-orange-500 shadow-lg">
+            {% else %}
+                <img src="{{ url_for('static', filename='default_avatar.png') }}" 
+                     alt="Default Avatar" 
+                     class="w-32 h-32 rounded-full border-4 border-gray-300 shadow-lg">
+            {% endif %}
 
-        <form method="POST" enctype="multipart/form-data">
-            <!-- Avatar & Name Section -->
-            <div class="flex flex-col items-center mb-6">
-                {% if user.avatar %}
-                    <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}" 
-                         alt="Avatar" 
-                         class="w-28 h-28 rounded-full border-4 border-orange-500 shadow-lg">
-                {% else %}
-                    <img src="{{ url_for('static', filename='default_avatar.png') }}" 
-                         alt="Default Avatar" 
-                         class="w-28 h-28 rounded-full border-4 border-gray-300 shadow-lg">
-                {% endif %}
-                
-                <!-- Display User Name -->
-                <p class="mt-3 text-xl font-semibold text-gray-800">{{ user.name }}</p>
+            <label for="avatar" class="mt-3 text-orange-500 font-semibold cursor-pointer flex items-center gap-2">
+                <span>Change Avatar</span>
+                <i class="fas fa-camera text-lg"></i>
+            </label>
+            <input type="file" name="avatar" id="avatar" class="hidden">
+        </div>
 
-                <!-- Upload Avatar -->
-                <label for="avatar" class="mt-4 text-orange-500 font-semibold cursor-pointer hover:underline">
-                    Change Avatar
-                </label>
-                <input type="file" name="avatar" id="avatar" class="hidden">
+        <!-- Profile Form -->
+        <form method="POST" enctype="multipart/form-data" class="grid grid-cols-2 gap-6 mt-6">
+            
+            <!-- Full Name -->
+            <div>
+                <label class="block text-gray-700 font-semibold">Full Name</label>
+                <div class="relative">
+                    <input type="text" name="first_name" value="{{ user.first_name }}" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    <i class="fas fa-pencil-alt absolute right-3 top-3 text-gray-400"></i>
+                </div>
             </div>
 
-            <!-- Bio Section -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2" for="bio">
-                    Bio
-                </label>
-                <textarea name="bio" id="bio" rows="4" 
+            <div>
+                <label class="block text-gray-700 font-semibold">Last Name</label>
+                <div class="relative">
+                    <input type="text" name="last_name" value="{{ user.last_name }}" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    <i class="fas fa-pencil-alt absolute right-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+
+            <!-- Username -->
+            <div>
+                <label class="block text-gray-700 font-semibold">Username</label>
+                <div class="relative">
+                    <input type="text" name="username" value="{{ user.username }}" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    <i class="fas fa-pencil-alt absolute right-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+
+            <!-- Date of Birth -->
+            <div>
+                <label class="block text-gray-700 font-semibold">Date of Birth</label>
+                <div class="relative">
+                    <input type="date" name="dob" value="{{ user.dob }}" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    <i class="fas fa-calendar-alt absolute right-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+
+            <!-- Age Display -->
+            <div>
+                <label class="block text-gray-700 font-semibold">Age</label>
+                <p class="text-lg font-medium text-gray-800">{{ user.age if user.age else 'N/A' }}</p>
+            </div>
+
+            <!-- Gender -->
+            <div>
+                <label class="block text-gray-700 font-semibold">Gender</label>
+                <select name="gender" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    <option value="Male" {% if user.gender == "Male" %} selected {% endif %}>Male</option>
+                    <option value="Female" {% if user.gender == "Female" %} selected {% endif %}>Female</option>
+                    <option value="Other" {% if user.gender == "Other" %} selected {% endif %}>Other</option>
+                </select>
+            </div>
+
+            <!-- Bio -->
+            <div class="col-span-2">
+                <label class="block text-gray-700 font-semibold">Bio</label>
+                <textarea name="bio" rows="3"
                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">{{ user.bio if user.bio else '' }}</textarea>
+            </div>
+            <!-- Email -->
+<div>
+    <label class="block text-gray-700 font-semibold">Email</label>
+    <div class="relative">
+        <input type="email" name="email" value="{{ user.email if user.email else '' }}" 
+               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+        <i class="fas fa-envelope absolute right-3 top-3 text-gray-400"></i>
+    </div>
+</div>
+
+<!-- Phone -->
+<div>
+    <label class="block text-gray-700 font-semibold">Phone</label>
+    <div class="relative">
+        <input type="tel" name="phone" value="{{ user.phone if user.phone else '' }}" 
+               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+        <i class="fas fa-phone absolute right-3 top-3 text-gray-400"></i>
+    </div>
+</div>
+            <!-- Address Section -->
+            <div class="col-span-2 bg-gray-200 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">Address</h3>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 font-semibold">Street</label>
+                        <input type="text" name="street" value="{{ address.street if address.street else '' }}" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold">City</label>
+                        <input type="text" name="city" value="{{ address.city if address.city else '' }}" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold">State</label>
+                        <input type="text" name="state" value="{{ address.state if address.state else '' }}" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold">Pincode</label>
+                        <input type="text" name="pincode" value="{{ address.pincode if address.pincode else '' }}" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-gray-700 font-semibold">Country</label>
+                        <input type="text" name="country" value="{{ address.country if address.country else '' }}" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    </div>
+                </div>
             </div>
 
             <!-- Products Sold -->
-            <div class="mb-6 text-center">
+            <div class="col-span-2 text-center">
                 <span class="text-gray-600 font-medium">Products Sold:</span>
                 <span class="text-gray-800 text-lg font-semibold">{{ user.sold_products|length if user.sold_products else 0 }}</span>
             </div>
 
             <!-- Submit Button -->
-            <div class="flex justify-center">
+            <div class="col-span-2 flex justify-center">
                 <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300">
                     Update Profile
                 </button>

@@ -1,70 +1,89 @@
-# Getting Started with Create React App
+# BartMart
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+BartMart is a barter-based marketplace built using Flask and MongoDB. Users earn points by selling products and use those points to buy products from others. The platform includes features like bargaining, chat for negotiations, and an admin panel for managing the marketplace.
 
-## Available Scripts
+## Features
+- **User System**: New users must sell an item first to earn points before making a purchase.
+- **Bargaining & Chat**: Users can negotiate prices within a fixed range through a dedicated chat system.
+- **Product Listing**: Each product is unique, with no duplicate listings from the same seller.
+- **Cart Logic**:
+  - Users can only barter one product at a time.
+  - Quantity cannot be increased since it's a one-to-one product exchange.
+  - Sold products are removed from availability.
+  - Prevents adding the same product multiple times to the cart.
+- **Profile Management**: Users can view their points balance and trade history.
+- **Secure Authentication**: Users log in via a simple authentication system using Flask-Bcrypt for password hashing.
+- **Admin Panel**: Allows managing product listings, user activities, and reviews.
+- **Image Uploads**: Images are uploaded and managed efficiently.
 
-In the project directory, you can run:
+## Tech Stack
+- **Backend**: Flask (Python), Flask-PyMongo for database interactions
+- **Frontend**: HTML, CSS, JavaScript (templates stored in `templates/` folder)
+- **Database**: MongoDB
+- **Authentication**: Flask-Bcrypt for secure password management
 
-### `yarn start`
+## Folder Structure
+```
+BartMart/
+│-- app.py               # Main application file
+│-- config.py            # Configuration settings
+│-- .gitignore           # Git ignore file
+│-- package-lock.json    # Dependency lock file (if using npm)
+│-- package.json         # Dependency file (if using npm)
+│-- yarn.lock            # Dependency lock file (if using yarn)
+│-- README.md            # Project documentation
+│-- 25CS49[1].pptx       # Presentation file
+│-- Future plans.txt     # Future improvements & roadmap
+│
+├── templates/           # Contains HTML templates
+│   ├── admin_dashboard.html
+│   ├── cart.html
+│   ├── checkout.html
+│   ├── login.html
+│   ├── my_products.html
+│   ├── (other HTML files)
+│
+├── static/              # Contains static assets (CSS, JS, Images)
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Installation & Setup
+### Prerequisites
+- Python installed
+- MongoDB set up
+- Virtual environment (optional but recommended)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Steps
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Mahendransriramprasad/BartMart.git
+   cd BartMart
+   ```
+2. Create and activate a virtual environment (optional but recommended):
+   ```sh
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+3. Install dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+4. Set up environment variables (create a `.env` file and configure MongoDB URI, Flask secret key, etc.).
+5. Start the Flask application:
+   ```sh
+   python app.py
+   ```
+6. Open the application in your browser at `http://localhost:5000`or `http://127.0.0.1:5000`.
 
-### `yarn test`
+## Future Plans
+See `Future plans.txt` for upcoming features and improvements.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Contributing
+Contributions are welcome! Feel free to fork the repo and submit pull requests.
 
-### `yarn build`
+## License
+This project is licensed under the MIT License.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Contact
+For any issues or suggestions, reach out at `mahendransriramprasad@gmail.com`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
