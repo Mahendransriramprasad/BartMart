@@ -38,7 +38,7 @@
 
             <!-- Category Filters -->
             <div class="mb-8 flex flex-wrap justify-center gap-2">
-                {% set categories = ["Electronics", "Clothing", "Vehicle", "Books", "Home & Garden", "Toys", "Sports", "Health & Beauty", "Furniture", "Pets", "Art", "Music", "Tools", "Jewelry", "Other"] %}
+                {% set categories = ["Electronics", "Clothing", "Vehicle","Tablet", "Books", "Home & Garden", "Toys", "Sports", "Health & Beauty", "Furniture", "Pets", "Art", "Music", "Tools", "Jewelry", "Other"] %}
                 {% for cat in categories %}
                     <a
                         href="{{ url_for('search_products', query=query, category=cat, min_price=min_price, max_price=max_price) }}"

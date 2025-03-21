@@ -118,7 +118,7 @@
                     <!-- Action Buttons -->
                     <div class="flex space-x-4">
                         <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
-                           class="flex-1 text-center px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold rounded-lg modern-btn shadow-md">
+                           class="flex-1 text-center px-6 py-3 bg-gradient-to-r from-red-400 to-red-600 text-white font-semibold rounded-lg modern-btn shadow-md">
                             🛒 Add to Cart
                         </a>
                         <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
@@ -156,7 +156,38 @@
             </div>
         </div>
     </section>
+<!-- Similar Products Section -->
+<section class="py-12 fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Similar Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% if similar_products %}
+                {% for similar_product in similar_products %}
+                    <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                        <a href="{{ url_for('product_detail', product_id=similar_product._id) }}">
+                            <img src="{{ similar_product.image1 }}" alt="{{ similar_product.name }}" class="w-full h-48 object-cover rounded-lg mb-4">
+                        </a>
+                        <p class="text-xl font-medium text-gray-700">{{ similar_product.name }}</p>
+                        <p class="text-xl font-semibold text-gray-900">{{ similar_product.price }} 🪙</p>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <a href="{{ url_for('add_to_cart', product_id=similar_product._id) }}" 
+                            class="px-3 py-2 text-xs bg-red-500 text-white font-bold rounded-md hover:bg-red-400">
+                                Add to Cart !
+                            </a>
 
+                            <a href="{{ url_for('negotiate_price', product_id=similar_product._id) }}" 
+                            class="px-3 py-2 text-xs bg-blue-500 text-white font-bold rounded-md hover:bg-blue-400">
+                            Negotiate
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-600">No similar products found.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
 
     {% include 'footer.html' %}
 

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 import os
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/ecommerce";
+app.config["MONGO_URI"] = "mongodb://localhost:27017/bartmart";
 app.secret_key = "bartMart"
 app.config['SESSION_COOKIE_SECURE'] = False
 
@@ -73,12 +73,26 @@ def home():
         suggested_products = []
         recommended_products = []
 
+    # Fetch electronics products
+    Gadgets = list(mongo.db.products.find({
+        "category": {"$in": ["Mobile", "Tablet", "Laptop"]},
+        "username": {"$ne": user["username"] if user else None}
+    }))
+
+    # Fetch fashion products
+    Fashion_products = list(mongo.db.products.find({
+        "category": {"$in": ["Bags", "Clothing", "Shoes", "Watches"]},
+        "username": {"$ne": user["username"] if user else None}
+    }))
+
     return render_template(
         "index.html",
         suggested_products=suggested_products,
         recommended_products=recommended_products,
         all_products=all_products,
-        user=user
+        Gadgets=Gadgets,  
+        Fashion_products=Fashion_products,
+        user=user  # Pass the user object to the template
     )
 @app.route("/search")
 def search_products():
@@ -355,6 +369,12 @@ def product_detail(product_id):
         seller = mongo.db.users.find_one({"username": product["username"]})
         seller_name = seller["username"] if seller else "Unknown"
 
+        # Fetch similar products (same category, excluding the current product)
+        similar_products = list(mongo.db.products.find({
+            "category": product["category"],
+            "_id": {"$ne": ObjectId(product_id)}  # Exclude the current product
+        }).limit(4))  # Limit to 4 similar products
+
         user = None
         if "username" in session:
             user = mongo.db.users.find_one({"username": session["username"]})
@@ -363,7 +383,13 @@ def product_detail(product_id):
         flash(f"Error: {str(e)}", "error")
         return redirect(url_for("home"))
     
-    return render_template('product_detail.html', product=product, seller_name=seller_name, user=user)
+    return render_template(
+        'product_detail.html',
+        product=product,
+        seller_name=seller_name,
+        user=user,
+        similar_products=similar_products  # Pass similar products to the template
+    )
 
 # Admin Review Products Route
 @app.route("/admin/review_products")

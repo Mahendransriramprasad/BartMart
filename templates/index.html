@@ -27,333 +27,275 @@
             object-fit: cover;
             border-radius: 0.5rem;
         }
-        /* Fullscreen container */
-    #carousel-container {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-    }
-
-    /* Slides */
-    .carousel-slide {
-        flex: 0 0 100vw;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
-
-    /* Image styling */
-    .offer-image {
-        width: 80%;
-        max-height: 400px;
-        object-fit: contain;
-        border-radius: 12px;
-        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Navigation buttons */
-    .carousel-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0, 0, 0, 0.6);
-        color: white;
-        border: none;
-        padding: 15px 20px;
-        cursor: pointer;
-        border-radius: 50%;
-        font-size: 24px;
-        transition: background 0.3s;
-    }
-
-    .carousel-btn:hover {
-        background: rgba(0, 0, 0, 0.8);
-    }
-
-    /* Indicators */
-    .carousel-indicators {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-    }
-
-    .carousel-indicator {
-        width: 12px;
-        height: 12px;
-        margin: 0 5px;
-        background-color: rgba(255, 255, 255, 0.5);
-        border-radius: 50%;
-        cursor: pointer;
-        transition: background 0.3s ease;
-    }
-
-    .carousel-indicator.active {
-        background-color: white;
-        transform: scale(1.3);
-    }
     </style>
+    <script>module.exports = {
+        theme: {
+          extend: {
+            animation: {
+              float: 'float 3s ease-in-out infinite',
+              pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+              pulse: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.5' },
+              },
+            },
+          },
+        },
+      };</script>
 </head>
-<body class="bg-gray-50 text-gray-800 ">
+<body class="bg-gray-50 text-gray-800">
 
     {% include 'header.html' %}
     {% include 'header2.html' %}
+
     <!-- Home Section -->
-    <section id="home" class="py-20 min-h-screen bg-gradient-to-b from-cyan-500 via-sky-400 to-blue-500 py-12 px-6 text-center ">
-        <div class="container mx-auto px-6">
-            <h1 class="text-5xl font-bold text-orange-800 mb-6">Welcome to BART-MART</h1>
-            <p class="text-xl text-orange-700 mb-12">Trade smartly & save points.</p>
-            
-          
-            <div class="min-h-screen overflow-hidden relative">
-                <!-- Slides Container -->
-                <div id="carousel" class="flex transition-transform duration-700 ease-in-out">
-                    <!-- Slide 1 -->
-                    <div class="w-full h-full flex-shrink-0 relative">
-                        <img src="../static/offer1.webp" alt="Offer 1" class="w-full h-full object-cover brightness-75">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <a href="#suggested-products" class="text-white text-3xl md:text-5xl font-bold bg-black bg-opacity-50 px-6 py-3 rounded-lg hover:bg-opacity-80 transition">
-                                Join the Bart Mart Community
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Slide 2 -->
-                    <div class="w-full h-full flex-shrink-0 relative">
-                        <img src="../static/offer2.avif" alt="Offer 2" class="w-full h-full object-cover brightness-75">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <a href="#recommended-products" class="text-white text-3xl md:text-5xl font-bold bg-black bg-opacity-50 px-6 py-3 rounded-lg hover:bg-opacity-80 transition">
-                                Get Started Now!
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Slide 3 -->
-                    <div class="w-full h-full flex-shrink-0 relative">
-                        <img src="../static/offer3.jpg" alt="Offer 3" class="w-full h-full object-cover brightness-75">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <a href="#all-products" class="text-white text-3xl md:text-5xl font-bold bg-black bg-opacity-50 px-6 py-3 rounded-lg hover:bg-opacity-80 transition">
-                                Join now and start bartering!
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            
-                <!-- Navigation Buttons -->
-                <button id="prevBtn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-40 text-white p-3 rounded-full hover:bg-opacity-70 transition">
-                    &#10094;
-                </button>
-                <button id="nextBtn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-40 text-white p-3 rounded-full hover:bg-opacity-70 transition">
-                    &#10095;
-                </button>
-            
-                <!-- Indicators -->
-                <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    <div class="carousel-indicator w-4 h-4 rounded-full bg-gray-400 cursor-pointer transition-all" data-index="0"></div>
-                    <div class="carousel-indicator w-4 h-4 rounded-full bg-gray-400 cursor-pointer transition-all" data-index="1"></div>
-                    <div class="carousel-indicator w-4 h-4 rounded-full bg-gray-400 cursor-pointer transition-all" data-index="2"></div>
-                </div>
-            </div>
-            
-
-
-
-        </div>
+    <section id="home" class="bg-neutral-300 py-12 px-6 text-center">
+        <h1 class="text-5xl font-bold text-slate-900 mb-6">Welcome to BART-MART</h1>
+        <p class="text-xl text-slate-600 mb-12">Trade smartly & save points.</p>
     </section>
 
-<!-- Suggested Products Section -->
-<section id="suggested-products" class="py-20 px-6 min-h-screen bg-gradient-to-b from-blue-500 via-indigo-400 to-purple-500">
-    <h2 class="text-4xl font-bold text-center mb-16">Suggested Products</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {% if suggested_products %}
-            {% for product in suggested_products %}
-                <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
-                    <a href="{{ url_for('product_detail', product_id=product._id) }}">
-                        <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
-                    </a>
-                    <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
-                    <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
-                    <div class="mt-4 flex justify-center space-x-4">
-                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
-                           class="px-6 py-3 w-full text-lg flex-1 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-400">
-                            Add to Cart
+    <!-- Fashion Products Section -->
+    <section id="home" class="bg-neutral-300 py-8 px-4 text-left">
+        <h3 class="text-2xl font-bold text-slate-900 mb-12">Fashion</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {% if Fashion_products %}
+                {% for product in Fashion_products %}
+                    <div class="bg-white rounded-md p-3 text-center shadow-md hover:scale-105 transition-all">
+                        <a href="{{ url_for('product_detail', product_id=product._id) }}">
+                            <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-32 object-cover rounded-md mb-2">
                         </a>
-                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
-                           class="px-6 py-3 w-full text-lg flex-1 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-400">
-                            Negotiate
-                        </a>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-center text-gray-200">No suggested products available.</p>
-        {% endif %}
-    </div>
-</section>
-
-<!-- Recommended Products Section -->
-<section id="recommended-products" class="py-20 px-4 min-h-screen bg-gradient-to-b from-purple-500 via-pink-400 to-orange-500">
-    <h2 class="text-4xl font-bold text-center mb-16">Recommended Products</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        {% if recommended_products %}
-            {% for product in recommended_products %}
-                <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
-                    <a href="{{ url_for('product_detail', product_id=product._id) }}">
-                        <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
-                    </a>
-                    <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
-                    <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
-                    <div class="mt-4 flex justify-center space-x-4">
-                        <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
-                           class="w-40 py-3 text-lg font-bold text-white bg-pink-500 rounded-full hover:bg-pink-400 text-center">
-                            Add to Cart
-                        </a>
-                        <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
-                           class="w-40 py-3 text-lg font-bold text-white bg-blue-500 rounded-full hover:bg-blue-400 text-center">
-                            Negotiate
-                        </a>
-                    </div>                    
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-center text-gray-200">No recommendations available. Start shopping to get personalized recommendations!</p>
-        {% endif %}
-    </div>
-</section>
-
-<!-- All Products Section -->
-<section id="all-products" class="py-20 px-3 min-h-screen bg-gradient-to-b from-orange-500 via-yellow-400 to-red-200">
-    <h2 class="text-4xl font-bold text-center mb-16">All Products</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-        {% if all_products %}
-            {% for product in all_products %}
-                <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
-                    <a href="{{ url_for('product_detail', product_id=product._id) }}">
-                        <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
-                    </a>
-                    <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
-                    <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
-                    {% if user %}
-                        <div class="mt-4 flex justify-center space-x-4">
+                        <p class="text-sm font-medium text-gray-700 truncate">{{ product.name }}</p>
+                        <p class="text-sm font-semibold text-gray-900">{{ product.price }} 🪙</p>
+                        <div class="mt-2 flex justify-center space-x-2">
                             <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
-                               class="w-40 py-3 text-lg font-bold text-white bg-pink-500 rounded-full hover:bg-pink-400 text-center">
-                                Add to Cart
+                               class="px-3 py-2 text-xs bg-red-500 text-white font-bold rounded-md hover:bg-red-400">
+                                Add
                             </a>
                             <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
-                               class="w-40 py-3 text-lg font-bold text-white bg-blue-500 rounded-full hover:bg-blue-400 text-center">
+                               class="px-3 py-2 text-xs bg-blue-500 text-white font-bold rounded-md hover:bg-blue-400">
                                 Negotiate
                             </a>
-                        </div>                
-                    {% endif %}
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-center text-gray-200">No products available.</p>
-        {% endif %}
-    </div>
-</section>
-
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gradient-to-b from-red-200 via-gray-200 to-green-500 text-center">
-        <h2 class="text-4xl font-bold text-gray-800 mb-8">Contact Us</h2>
-        <p class="text-lg text-gray-600 mb-12">For any inquiries, feel free to reach out to us!</p>
-        <form action="#" method="POST" class="mt-6 max-w-lg mx-auto">
-            <input type="text" name="name" placeholder="Your Name" class="w-full p-4 mb-4 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500">
-            <input type="email" name="email" placeholder="Your Email" class="w-full p-4 mb-4 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500">
-            <textarea name="message" placeholder="Your Message" class="w-full p-4 mb-4 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500" rows="5"></textarea>
-            <button type="submit" class="w-full px-6 py-2 bg-pink-500 text-white rounded-full font-bold hover:bg-pink-400">Send Message</button>
-        </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-500">No Fashion products available.</p>
+            {% endif %}
+        </div>
     </section>
+
+    <!-- Recommended Products Section (Visible only if user is logged in) -->
+    {% if user %}
+        <section id="recommended-products" class="py-20 px-4 min-h-screen bg-neutral-300">
+            <h2 class="text-4xl font-bold text-center mb-16">Recommended Products</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                {% if recommended_products %}
+                    {% for product in recommended_products %}
+                        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                            <a href="{{ url_for('product_detail', product_id=product._id) }}">
+                                <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                            </a>
+                            <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
+                            <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
+                            <div class="mt-4 flex justify-center space-x-4">
+                                <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
+                                   class="w-40 py-3 text-lg font-bold text-white bg-red-500 rounded-full hover:bg-pink-400 text-center">
+                                    Add to Cart
+                                </a>
+                                <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
+                                   class="w-40 py-3 text-lg font-bold text-white bg-blue-500 rounded-full hover:bg-blue-400 text-center">
+                                    Negotiate
+                                </a>
+                            </div>                    
+                        </div>
+                    {% endfor %}
+                {% else %}
+                <div class="relative flex flex-col items-center justify-center p-6">
+                    <!-- Floating Emoji with Bounce Animation -->
+                    <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 text-5xl animate-bounce">
+                        🤩
+                    </span>
+                
+                    <!-- Main Text Section with Glow & Interactive Hover -->
+                    <p class="text-center text-orange-900 text-3xl font-extrabold relative transition-all duration-500 ease-in-out group 
+                              hover:scale-105 hover:text-yellow-500 shadow-lg shadow-yellow-400/50 p-4 rounded-xl">
+                        
+                        <!-- Left Sparkle Animation -->
+                        <span class="absolute -top-3 -left-3 text-yellow-400 animate-spin">✨</span>
+                
+                        <!-- Main Text with Pulse Animation -->
+                        <span class="block animate-pulse leading-snug">
+                            What are you waiting for? Start shopping and let us show you what's trending just for you.
+                        </span>
+                
+                        <!-- Right Sparkle Animation -->
+                        <span class="absolute -bottom-3 -right-3 text-yellow-400 animate-spin">✨</span>
+                    </p>
+                
+                    <!-- Call to Action Button with Hover Effects -->
+                    <a href="#all-products" class="mt-5 px-6 py-3 text-white bg-gradient-to-r from-orange-500 to-yellow-500 
+                                               font-bold rounded-full shadow-lg shadow-orange-500/50 
+                                               hover:from-yellow-500 hover:to-orange-500 hover:scale-110 transition-transform">
+                        Start Shopping 🚀
+                    </a>
+                </div>
+                
+                {% endif %}
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- Suggested Products Section (Visible only if user is logged in) -->
+    {% if user %}
+        <section id="suggested-products" class="py-20 px-6 min-h-screen bg-neutral-300">
+            <h2 class="text-4xl font-bold text-center mb-16">Suggested Products</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% if suggested_products %}
+                    {% for product in suggested_products %}
+                        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                            <a href="{{ url_for('product_detail', product_id=product._id) }}">
+                                <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                            </a>
+                            <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
+                            <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
+                            <div class="mt-4 flex justify-center space-x-4">
+                                <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
+                                   class="px-6 py-3 w-full text-lg flex-1 bg-red-500 text-white font-bold rounded-full hover:bg-red-400">
+                                    Add to Cart
+                                </a>
+                                <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
+                                   class="px-6 py-3 w-full text-lg flex-1 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-400">
+                                    Negotiate
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-gray-200">No suggested products available.</p>
+                {% endif %}
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- All Products Section -->
+    <section id="all-products" class="py-20 px-3 min-h-screen bg-neutral-300">
+        <h2 class="text-4xl font-bold text-center mb-16">All Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            {% if all_products %}
+                {% for product in all_products %}
+                    <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                        <a href="{{ url_for('product_detail', product_id=product._id) }}">
+                            <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg mb-4">
+                        </a>
+                        <p class="text-xl font-medium text-gray-700">{{ product.name }}</p>
+                        <p class="text-xl font-semibold text-gray-900">{{ product.price }} 🪙</p>
+                        {% if user %}
+                            <div class="mt-4 flex justify-center space-x-4">
+                                <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
+                                   class="w-40 py-3 text-lg font-bold text-white bg-red-500 rounded-full hover:bg-pink-400 text-center">
+                                    Add to Cart
+                                </a>
+                                <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
+                                   class="w-40 py-3 text-lg font-bold text-white bg-blue-500 rounded-full hover:bg-blue-400 text-center">
+                                    Negotiate
+                                </a>
+                            </div>                
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-200">No products available.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Electronics Gadgets Section -->
+    <section id="home" class="bg-neutral-300 py-8 px-4 text-left">
+        <h3 class="text-2xl font-bold text-slate-900 mb-12">Best of Electronic Gadgets</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {% if Gadgets %}
+                {% for product in Gadgets %}
+                    <div class="bg-white rounded-md p-3 text-center shadow-md hover:scale-105 transition-all">
+                        <a href="{{ url_for('product_detail', product_id=product._id) }}">
+                            <img src="{{ product.image1 }}" alt="{{ product.name }}" class="w-full h-32 object-cover rounded-md mb-2">
+                        </a>
+                        <p class="text-sm font-medium text-gray-700 truncate">{{ product.name }}</p>
+                        <p class="text-sm font-semibold text-gray-900">{{ product.price }} 🪙</p>
+                        <div class="mt-2 flex justify-center space-x-2">
+                            <a href="{{ url_for('add_to_cart', product_id=product._id) }}" 
+                               class="px-3 py-2 text-xs bg-red-500 text-white font-bold rounded-md hover:bg-red-400">
+                                Add
+                            </a>
+                            <a href="{{ url_for('negotiate_price', product_id=product._id) }}" 
+                               class="px-3 py-2 text-xs bg-blue-500 text-white font-bold rounded-md hover:bg-blue-400">
+                                Negotiate
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-500">No electronics products available.</p>
+            {% endif %}
+        </div>
+    </section>
+
     <!-- How It Works Section -->
-<section id="how-it-works" class="py-20 px-6 min-h-screen bg-gradient-to-b from-green-500 via-teal-400 to-blue-500">
-    <h2 class="text-4xl font-bold text-center text-white mb-16">How BartMart Works</h2>
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <!-- Step 1: Sell a Product -->
-        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
-            <div class="text-6xl mb-4 text-green-500">1</div>
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Sell a Product</h3>
-            <p class="text-gray-600">
-                List your product for sale. Once approved, it will be available for other users to purchase.
-            </p>
+    <section id="how-it-works" class="py-20 px-6 min-h-screen bg-neutral-300">
+        <h2 class="text-4xl font-bold text-center text-slate-900 mb-16">How BartMart Works</h2>
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Step 1: Sell a Product -->
+            <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                <div class="text-6xl mb-4 text-green-500">1</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Sell a Product</h3>
+                <p class="text-gray-600">
+                    List your product for sale. Once approved, it will be available for other users to purchase.
+                </p>
+            </div>
+
+            <!-- Step 2: Earn Coins -->
+            <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                <div class="text-6xl mb-4 text-teal-500">2</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Earn Coins</h3>
+                <p class="text-gray-600">
+                    When your product is sold, you earn coins that you can use to buy other products on BartMart.
+                </p>
+            </div>
+
+            <!-- Step 3: Buy Products -->
+            <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                <div class="text-6xl mb-4 text-blue-500">3</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Buy Products</h3>
+                <p class="text-gray-600">
+                    Use your coins to purchase products listed by other users. Negotiate prices to get the best deal!
+                </p>
+            </div>
+
+            <!-- Step 4: Trade Smartly -->
+            <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
+                <div class="text-6xl mb-4 text-purple-500">4</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Trade Smartly</h3>
+                <p class="text-gray-600">
+                    BartMart is all about smart trading. Sell what you don't need and buy what you want!
+                </p>
+            </div>
         </div>
 
-        <!-- Step 2: Earn Coins -->
-        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
-            <div class="text-6xl mb-4 text-teal-500">2</div>
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Earn Coins</h3>
-            <p class="text-gray-600">
-                When your product is sold, you earn coins that you can use to buy other products on BartMart.
-            </p>
+        <!-- Call to Action -->
+        <div class="text-center mt-16">
+            <p class="text-xl text-slate-900 mb-6">Ready to start trading? Join BartMart today!</p>
+            <a href="{{ url_for('sell') if user else url_for('register') }}" 
+               class="px-8 py-4 bg-white text-gray-800 font-bold rounded-full hover:bg-gray-100 transition">
+                Get Started
+            </a>
         </div>
+    </section>
 
-        <!-- Step 3: Buy Products -->
-        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
-            <div class="text-6xl mb-4 text-blue-500">3</div>
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Buy Products</h3>
-            <p class="text-gray-600">
-                Use your coins to purchase products listed by other users. Negotiate prices to get the best deal!
-            </p>
-        </div>
-
-        <!-- Step 4: Trade Smartly -->
-        <div class="bg-white rounded-lg p-6 text-center shadow-xl hover:scale-105 transition-all">
-            <div class="text-6xl mb-4 text-purple-500">4</div>
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Trade Smartly</h3>
-            <p class="text-gray-600">
-                BartMart is all about smart trading. Sell what you don't need and buy what you want!
-            </p>
-        </div>
-    </div>
-
-    <!-- Call to Action -->
-    <div class="text-center mt-16">
-        <p class="text-xl text-white mb-6">Ready to start trading? Join BartMart today!</p>
-        <a href="{{ url_for('register') }}" class="px-8 py-4 bg-white text-gray-800 font-bold rounded-full hover:bg-gray-100 transition">
-            Get Started
-        </a>
-    </div>
-</section>
-{% include 'footer.html' %}
-
-    <script>
-    let currentIndex = 0;
-const slides = document.querySelectorAll("#carousel > div"); // Select only the slide divs
-const indicators = document.querySelectorAll(".carousel-indicator");
-const carousel = document.getElementById("carousel");
-const totalSlides = slides.length;
-
-// Ensure #carousel is wide enough for all slides
-carousel.style.width = `${totalSlides * 100}%`;
-slides.forEach(slide => slide.style.width = `${100 / totalSlides}%`);
-
-function showSlide(index) {
-    currentIndex = (index + totalSlides) % totalSlides;
-    
-    // Move the carousel
-    carousel.style.transform = `translateX(-${currentIndex * (100 / totalSlides)}%)`;
-
-    // Update active indicator
-    indicators.forEach((dot, i) => {
-        dot.classList.toggle("bg-white", i === currentIndex);
-        dot.classList.toggle("scale-125", i === currentIndex);
-    });
-}
-
-// Add event listeners for buttons
-document.getElementById("prevBtn").addEventListener("click", () => showSlide(currentIndex - 1));
-document.getElementById("nextBtn").addEventListener("click", () => showSlide(currentIndex + 1));
-
-// Add event listeners for indicators
-indicators.forEach(dot => {
-    dot.addEventListener("click", () => showSlide(parseInt(dot.getAttribute("data-index"))));
-});
-
-// Auto-slide every 5 seconds
-setInterval(() => showSlide(currentIndex + 1), 5000);
-
-    </script>
+    {% include 'footer.html' %}
 </body>
 </html>
